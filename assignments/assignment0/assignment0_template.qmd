@@ -1,0 +1,167 @@
+---
+title: "APEC 8221 - Assignment 0: Workspace Setup"
+subtitle: "Submission File"
+author: "[Yunshu Yang]"
+format: 
+  pdf:
+    colorlinks: true
+execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+## Part 1: Software Installation & Verification {#sec-setup}
+
+Below are the results from my run of the `setup-tests_autosave.R` script.
+
+<!-- Do not change the code in the chunk below. -->
+
+<!-- It reads and displays the contents of the `assignment0-setup.txt` file you created. -->
+
+```{r}
+#| label: verification-results
+#| echo: false
+
+# This chunk reads the text file you created in Part 1 and prints its contents here.
+# Make sure the file path is correct. If your .qmd file and .txt file are in the
+# same folder, this will work.
+readLines("assignment0-setup.txt") |> 
+  cat(sep = "\n")
+```
+
+------------------------------------------------------------------------
+
+## Part 2: Git & GitHub Repository {#sec-git}
+
+<!-- Make sure the file path correctly links to your repo URL. -->
+
+My GitHub repo URL is <https://github.com/%5Byour-username%5D/apec8221-%5Byour-x500id%5D>
+
+------------------------------------------------------------------------
+
+## Part 3: Embedded Quarto Document {#sec-quarto}
+
+This section embeds the content from the `assignment-0-quarto.qmd` file you created.
+
+<!-- The line below includes your other Quarto file's content. -->
+
+<!-- Make sure the file path is correct relative to this document. -->
+
+{{< include assignment0-quarto.qmd >}}
+
+------------------------------------------------------------------------
+
+## Part 4: R Basics Knowledge Check {#sec-r-practice}
+
+### 1. Objects and Assignment
+
+**Question:** What is the primary assignment operator in R? Use it to create an object named `my_age` that holds your age in years.
+
+**Answer:** \[Your text answer here...\]
+
+```{r}
+#| label: q1-assignment
+
+# Create the 'my_age' object below
+
+```
+
+### 2. Vectors
+
+**Question:** What is the purpose of the `c()` function in R? Use it to create a vector named `favorite_numbers` containing three of your favorite numbers.
+
+**Answer:** \[Your text answer here...\]
+
+```{r}
+#| label: q2-vectors
+
+# Create the 'favorite_numbers' vector below
+
+```
+
+### 3. Subsetting Vectors
+
+**Question:** Write the code that would select the *second* number from the `favorite_numbers` vector you just created.
+
+```{r}
+#| label: q3-subsetting
+
+# Write your subsetting code below
+
+```
+
+### 4. Missing Values and Logic
+
+**Question:** The code chunk below creates a vector `x` with missing values (`NA`). a. Write a line of code that returns a logical vector (`TRUE`/`FALSE`) indicating which elements are missing. b. Write a line of code that *counts* how many total missing values are in the vector.
+
+```{r}
+#| label: q4-setup
+# This vector is for the exercise
+x <- c(1, 5, NA, 10, NA, 20)
+```
+
+```{r}
+#| label: q4a-find-na
+# a) Return a logical vector indicating missing elements
+
+```
+
+```{r}
+#| label: q4b-count-na
+# b) Count the total number of missing values
+
+```
+
+### 5. Data Frames and Inspection
+
+**Question:** The code chunk below creates a simple data frame called `pets`. a. Use a function to look at the first few rows of the data frame. b. Use a function to get a summary of the structure of the data frame. c. Write the code to select *only* the `age` column from the data frame.
+
+```{r}
+#| label: q5-setup
+# This data frame is for the exercise
+pets <- data.frame(
+  name = c("Fido", "Whiskers", "Nemo"), 
+  animal = c("Dog", "Cat", "Fish"), 
+  age = c(5, 8, 2)
+)
+```
+
+```{r}
+#| label: q5a-head
+# a) Look at the first few rows
+
+```
+
+```{r}
+#| label: q5b-structure
+# b) Get a summary of the structure
+
+```
+
+```{r}
+#| label: q5c-select-column
+# c) Select only the 'age' column
+
+```
+
+### 6. Workspace and Files
+
+**Question:** a. What function would you use to see a list of all the objects currently in your R environment? b. What function would you use to find out your current working directory?
+
+**Answer:** a. \[Your text answer here...\] b. \[Your text answer here...\]
+
+### 7. Getting Help
+
+**Question:** Which function in R can you use to open the help documentation for another function? In the code chunk below, write the code you would use to see the help file for the `mean()` function.
+
+**Answer:** \[Your text answer here...\]
+
+```{r}
+#| label: q7-help 
+#| #| eval: false
+
+# Write the code to see the help file for the mean() function below.
+# I've set eval: false so this chunk won't cause an error when you render.
+
+```

@@ -1,0 +1,278 @@
+---
+title: "APEC 8221 Lecture 1: The Modern Research Workflow"
+subtitle: "Live Demo: I Do, We Do, You Do"
+author: "Ali Joglekar"
+date: "September 2, 2025"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+  eval: true
+  echo: true
+editor: visual
+---
+
+This Quarto file will guide you through a series of "I Do, We Do, You Do" tasks that blends demonstration with hands-on practice opportunities as a class and in small-groups.
+
+## RStudio IDE Tour (`I Do`)
+
+Let's look at the four main panes:
+
+1.  **Top-Left (Source):** Script editor. Where you write and save code (`.R`, `.qmd`).
+2.  **Bottom-Left (Console):** Live R session. Where you run code interactively.
+3.  **Top-Right (Environment/History):** See the objects you've created.
+4.  **Bottom-Right (Files/Plots/Packages):** Navigate files, view plots, manage packages.
+
+## Your First R Project (`We Do`)
+
+### Create R project
+
+1.  Click `File -> New Project...`
+2.  Choose `New Directory`.
+3.  Choose `New Project`.
+4.  Give it a name like `APEC8221_R-Programming`. Store it somewhere sensible (like your Desktop or a `Courses` folder).
+5.  Click `Create Project`.
+6.  Create `Lectures\Lecture1_Workflow` folder (or similarly named based on your preferences).
+
+Notice how the file path at the top of the console has changed to your project's directory.
+
+### Look at the files created
+
+```{r}
+getwd()  # Show current working directory
+
+list.files(all.files = TRUE)  # Show hidden files too
+```
+
+-   `.Rproj` file (this is what makes it a "project")
+-   `.Rproj.user/` folder (RStudio settings)
+
+When you double-click a `.Rproj` file, RStudio opens with:
+
+-   Correct working directory set
+-   Previous session restored (if desired)
+-   Project-specific options
+-   Clean slate for reproducibility
+
+### Explore .Rproj file
+
+Let's understand what makes R Projects special by examining the `.Rproj` file together.
+
+-   Everyone open their `.Rproj` file in a text editor
+-   (Right-click → Open With → Text Editor or Notepad)
+
+Typical `.Rproj` file contents:
+
+```         
+Version: 1.0
+RestoreWorkspace: Default 
+SaveWorkspace: Default 
+AlwaysSaveHistory: Default
+EnableCodeIndexing: Yes 
+UseSpacesForTab: Yes 
+NumSpacesForTab: 2 
+Encoding: UTF-8
+RnwWeave: Sweave 
+LaTeX: pdfLaTeX
+```
+
+### Discussion Questions
+
+**Q: What do you think 'RestoreWorkspace' means?**
+
+-   Loads previous session's objects automatically
+-   **Pro:** Continue where you left off
+-   **Con:** Hidden dependencies can break reproducibility
+
+**Q: Why might 'UseSpacesForTab' matter?**
+
+-   Ensures consistency across different computers/editors
+-   Professional code standards
+-   Prevents formatting issues in collaboration
+
+**Q: What's the benefit of 'Encoding: UTF-8'?**
+
+-   Handles international characters properly
+-   Prevents encoding issues when sharing code
+-   Universal standard
+
+These settings ensure your project works the **same way on my computer, your computer, and your collaborator's computer**!
+Reproducibility in action!
+
+### Relative paths
+
+A relative path specifies the location of a file or directory [**in relation to the current working directory**]{.underline}, rather than from the root of the file system. 
+
+-   Absolute path: provides the full, complete address from the root
+
+    -   `'C:/Users/joglekar/Documents/APEC8221/Lectures/lecture1_notes.qmd/'`
+
+-   Relative path uses special notations like `.` (current directory) and `..` (parent directory) to define the path from where you are currently positioned
+
+    -   `'./Lectures/lecture1_notes.qmd/'`
+
+```{r}
+#| warning: false
+
+# Create a professional folder structure 
+dir.create("data") 
+dir.create("scripts")  
+dir.create("output")  
+
+# Show the structure 
+list.files(all.files = TRUE)
+```
+
+This structure means anyone can run your code.
+No more `setwd('C:/Users/joglekar/Documents/my_messy_folder/')`
+
+## Basic R Syntax
+
+-   **Assignment operator `<-`**: "gets". Puts the thing on the right into the object on the left.
+    -   `x <- 5`
+-   **Basic data types**:
+    -   Character: `my_name <- "Ali Joglekar"`
+    -   Logical: `is_instructor <- TRUE`
+    -   Numeric vector: `test_scores <- c(85, 92, 78, 96)`
+-   **Objects**: You store data in objects (also called variables).
+    -   `my_weight <- 180`
+-   **Functions**: `function_name(argument1, argument2)`.
+    -   `sum(2, 3)`
+    -   `mean(test_scores)`
+-   **Comments `#`**: R ignores anything after a `#`. Use them to explain your code!
+-   **Packages:** library() loads/attaches package(s) to your workspace
+    -   `library(tidyverse)` the package we'll use constantly
+
+## First Script (`You Do`)
+
+1.  In your new project, go to `File -> New File -> R Script`.
+2.  A blank script opens in the Source pane.
+3.  Save the file in your `Lectures\Lecture1_Workflow` folder as `lec-01-practice.R`.
+
+### Core Exercise (10 mins):
+
+Type the following code into your script and run each line using `Cmd/Ctrl + Enter`.
+
+**Don't copy-paste**; the muscle memory is important.
+
+```{r}
+# My first R script!
+
+# 1. Create two numeric objects
+a <- 10
+b <- 20
+
+# 2. Add them together and store in a new object
+c <- a + b
+
+# 3. Look at the result by typing its name
+c 
+```
+
+To run a line of code, put your cursor on that line and press Ctrl+Enter on Windows or Cmd+Enter on a Mac.
+Do this for each line.
+
+-   What do you see in the Environment pane?
+-   What happens in the console?
+
+### `You Do` Extensions
+
+If you finish early, try these extended learning activities:
+
+#### Extension 1: Challenges in your script
+
+-   **Challenge 1:** Create two new objects, `x` and `y`, with different numbers. Calculate their product (`*`) and store it in an object called `z`.
+-   **Challenge 2:** Create an object called `my_name` that contains your name as a character string (e.g., `"Ali"`). What happens if you try to add `my_name` to a number? R will give you an error—this is a good thing! Reading errors is a key skill.
+-   **Challenge 3:** Add more comments to your script explaining what each line does.
+
+#### Extension 2: Customize RStudio
+
+-   **Tools → Global Options → Appearance:** Choose a theme you like
+-   **Tools → Global Options → Code → Display:**
+    -   Check "Show line numbers"
+    -   Check "Highlight R function calls"
+-   **Tools → Global Options → Pane Layout:** Arrange panes to your preference
+
+#### Extension 3: Explore Package Installation
+
+```{r}
+#| eval: false
+
+# Check which packages are already installed 
+installed_pkgs <- installed.packages()[1:10, c("Package", "Version")] 
+print(installed_pkgs)  
+
+# Install a useful package for robust file paths 
+install.packages("here") 
+library(here)  # Test the here() function here()  
+
+# Should show your project directory
+```
+
+## Debugging Interlude: Common R Errors (`I Do`)
+
+Don't be afraid to create errors; it's the fastest way to learn.
+Here are the three most common beginner errors:
+
+### Mistake 1: Case sensitivity (very common!)
+
+```{r}
+#| error: true
+#| warning: true
+
+# This works
+my_number <- 42
+
+# This would fail
+My_number
+```
+
+**Solution:** R is case-sensitive!
+Check your spelling.
+
+### Mistake 2: Missing quotes for character data
+
+```{r}
+#| error: true
+#| warning: true
+
+# This works
+university <- "University of Minnesota"
+print(university)
+
+# This would fail
+university <- University of Minnesota
+```
+
+**Solution:** Text needs quotes around it.
+
+### Mistake 3: Unmatched parentheses
+
+```{r}
+#| error: true
+#| warning: true
+
+# This works
+result <- mean(c(1, 2, 3, 4, 5))
+print(result)
+
+# This would fail
+mean(c(1, 2, 3, 4, 5)
+```
+
+**Solution:** Count your parentheses.
+RStudio helps with matching.
+
+### Your debugging workflow
+
+1.  READ the error message carefully
+2.  CHECK spelling and capitalization
+3.  COUNT parentheses, brackets, and quotes
+4.  ASK for help if you're stuck!

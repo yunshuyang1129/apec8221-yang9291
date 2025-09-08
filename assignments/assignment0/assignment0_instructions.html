@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>APEC 8221 - Assignment 0: Workspace Setup</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="assignment0_instructions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="assignment0_instructions_files/libs/quarto-html/quarto.js"></script>
+<script src="assignment0_instructions_files/libs/quarto-html/popper.min.js"></script>
+<script src="assignment0_instructions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="assignment0_instructions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="assignment0_instructions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="assignment0_instructions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="assignment0_instructions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="assignment0_instructions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="assignment0_instructions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#assignment-overview" id="toc-assignment-overview" class="nav-link active" data-scroll-target="#assignment-overview">Assignment Overview</a>
+  <ul class="collapse">
+  <li><a href="#important-timeline-strategy" id="toc-important-timeline-strategy" class="nav-link" data-scroll-target="#important-timeline-strategy">Important Timeline Strategy</a></li>
+  <li><a href="#format-submission-instructions" id="toc-format-submission-instructions" class="nav-link" data-scroll-target="#format-submission-instructions">Format &amp; Submission Instructions</a></li>
+  <li><a href="#grading-rubric" id="toc-grading-rubric" class="nav-link" data-scroll-target="#grading-rubric">Grading Rubric</a></li>
+  </ul></li>
+  <li><a href="#sec-setup" id="toc-sec-setup" class="nav-link" data-scroll-target="#sec-setup">Part 1: Software Installation &amp; Verification</a>
+  <ul class="collapse">
+  <li><a href="#task" id="toc-task" class="nav-link" data-scroll-target="#task">Task</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a></li>
+  </ul></li>
+  <li><a href="#sec-git" id="toc-sec-git" class="nav-link" data-scroll-target="#sec-git">Part 2: Git Configuration &amp; Authentication</a>
+  <ul class="collapse">
+  <li><a href="#task-1" id="toc-task-1" class="nav-link" data-scroll-target="#task-1">Task</a></li>
+  <li><a href="#instructions-1" id="toc-instructions-1" class="nav-link" data-scroll-target="#instructions-1">Instructions</a></li>
+  </ul></li>
+  <li><a href="#sec-quarto" id="toc-sec-quarto" class="nav-link" data-scroll-target="#sec-quarto">Part 3: Quarto Documents</a>
+  <ul class="collapse">
+  <li><a href="#task-2" id="toc-task-2" class="nav-link" data-scroll-target="#task-2">Task</a></li>
+  <li><a href="#instructions-2" id="toc-instructions-2" class="nav-link" data-scroll-target="#instructions-2">Instructions</a></li>
+  </ul></li>
+  <li><a href="#sec-r-practice" id="toc-sec-r-practice" class="nav-link" data-scroll-target="#sec-r-practice">Part 4: R Basics Self-Study &amp; Knowledge Check</a>
+  <ul class="collapse">
+  <li><a href="#task-3" id="toc-task-3" class="nav-link" data-scroll-target="#task-3">Task</a></li>
+  <li><a href="#r-basics-self-study-w-swirl" id="toc-r-basics-self-study-w-swirl" class="nav-link" data-scroll-target="#r-basics-self-study-w-swirl">R Basics Self-Study w/ <code>swirl</code></a></li>
+  <li><a href="#knowledge-check" id="toc-knowledge-check" class="nav-link" data-scroll-target="#knowledge-check">Knowledge Check</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">APEC 8221 - Assignment 0: Workspace Setup</h1>
+<p class="subtitle lead">Due Monday, September 8, 2025 at 8:00 AM</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="assignment-overview" class="level1">
+<h1>Assignment Overview</h1>
+<p>This assignment ensures you have a fully functional R/RStudio/Git setup and are comfortable with the basic tools/commands we’ll use throughout the course. The assignment is structured to help you succeed with Git setup by providing support and flexibility.</p>
+<section id="important-timeline-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="important-timeline-strategy">Important Timeline Strategy</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>📅 Critical Timing:</strong></p>
+<ul>
+<li><strong>Complete Part 1 BEFORE Thursday’s class</strong></li>
+<li><strong>Thursday’s class will cover Git/GitHub &amp; Quarto in detail</strong></li>
+<li><strong>Complete Parts 2-4 AFTER Thursday’s class</strong></li>
+<li><strong>Final submission: Monday morning</strong></li>
+</ul>
+<p>This timeline gives you time to get help with Git authentication issues during Thursday’s class.</p>
+</div>
+</div>
+</section>
+<section id="format-submission-instructions" class="level2">
+<h2 class="anchored" data-anchor-id="format-submission-instructions">Format &amp; Submission Instructions</h2>
+<ol type="1">
+<li>Use the provided <code>assignment0-template.qmd</code> Quarto template for your assignment.</li>
+<li>Save your assignment file with the name <code>assignment0-[your-x500-id].qmd</code> – replacing the <code>[your-x500-id]</code> with your own x500 ID.</li>
+<li>Include the URL for your GitHub repository (e.g., <a href="https://github.com/YOUR-USERNAME/apec8221-X500">https://github.com/[your-username]/apec8221-[your-x500-id])</a>){.uri} at the top of your Quarto file. When I view the repository, I should see all of your assignment files.</li>
+<li>Render your assignment file as a either an HTML or PDF file. Submit this file to Canvas before Monday, September 8th at 8AM.</li>
+</ol>
+</section>
+<section id="grading-rubric" class="level2">
+<h2 class="anchored" data-anchor-id="grading-rubric">Grading Rubric</h2>
+<table class="table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 24%">
+<col style="width: 26%">
+<col style="width: 24%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Criteria</th>
+<th>Needs Improvement (0-3 pts)</th>
+<th>Satisfactory (4 pts)</th>
+<th>Excellent (5 pts)</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Software Installation &amp; Verification</td>
+<td>Setup verification script (<code>setup-tests_autosave.R</code>) was not run, contains multiple failed checks (✗ marks), or <code>assignment0-setup.txt</code> file is missing/incomplete</td>
+<td>Most setup checks pass (✓) with only minor issues (e.g., one package installation problem that was resolved), and verification results are properly included via <code>readLines()</code></td>
+<td>All setup checks show ✓ marks demonstrating fully functional R ≥4.4.0, RStudio, Git, TinyTeX, and required packages. Verification results cleanly integrated into final document</td>
+<td>20%</td>
+</tr>
+<tr class="even">
+<td>Git Configuration &amp; Authentication</td>
+<td>GitHub repository not created, wrong naming convention, public instead of private, instructor not added as collaborator, or major authentication failures</td>
+<td>Repository created with correct naming (<code>apec8221-[x500-id]</code>) and is private, but may have minor setup issues (e.g., delayed collaborator invitation or messy initial commit)</td>
+<td>Repository perfectly configured: correct naming, private access, instructor added as collaborator, proper folder structure, and successful push demonstrating working authentication</td>
+<td>20%</td>
+</tr>
+<tr class="odd">
+<td>Quarto Document Integration</td>
+<td><code>assignment-0-quarto.qmd</code> missing, fails to render, or shortcode inclusion in main document doesn’t work</td>
+<td>Simple Quarto document renders successfully with basic elements (YAML, code chunks, narrative text) and is included in main assignment via shortcode, but may have minor formatting issues</td>
+<td>Professional Quarto document with proper YAML header, working R code chunks (pets data frame, inline statistics), clean narrative text, renders flawlessly, and integrates seamlessly into main assignment document</td>
+<td>20%</td>
+</tr>
+<tr class="even">
+<td>R Basics Knowledge Check</td>
+<td>Knowledge check questions largely unanswered, contain significant errors, or demonstrate poor understanding of fundamental R concepts (assignment operators, vectors, data frames)</td>
+<td>Most questions answered correctly showing competency with basic R concepts, but may have minor syntax errors or incomplete explanations</td>
+<td>All knowledge check questions answered accurately with clear, correct R code demonstrating mastery of: assignment operators, <code>c()</code> function, vector subsetting, missing values (<code>is.na()</code>, <code>sum()</code>), data frame inspection (<code>head()</code>, <code>str()</code>), and help system</td>
+<td>20%</td>
+</tr>
+<tr class="odd">
+<td>Overall Project Organization &amp; Reproducibility</td>
+<td>Main assignment document doesn’t render, uses absolute file paths, files scattered without organization, or Git commit history shows single “data dump”</td>
+<td>Assignment renders successfully using relative paths and R Project structure, files organized in logical folders, commit history shows progression but messages may be generic</td>
+<td>Professional-level organization: main <code>assignment0-[x500-id].qmd</code> renders perfectly, all supporting files in proper subdirectories, clean Git history with descriptive commit messages, perfect reproducibility from GitHub repository</td>
+<td>20%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="sec-setup" class="level1">
+<h1>Part 1: Software Installation &amp; Verification</h1>
+<p><em>⚠️ Complete this part BEFORE Thursday’s Git/GitHub class</em></p>
+<section id="task" class="level2">
+<h2 class="anchored" data-anchor-id="task">Task</h2>
+<p>In this section, you will install the necessary software and then run a verification script to confirm that everything is working as expected.</p>
+</section>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<section id="software-installation" class="level3">
+<h3 class="anchored" data-anchor-id="software-installation">Software Installation</h3>
+<p>Please install the following software. If you already have them installed, make sure they are up-to-date.</p>
+<ol type="1">
+<li><strong>R:</strong> Download and install the latest version of R from the <a href="https://cran.r-project.org/">Comprehensive R Archive Network (CRAN)</a>.</li>
+<li><strong>RStudio:</strong> Download and install the latest free “RStudio Desktop” version from the <a href="https://posit.co/download/rstudio-desktop/">Posit website</a>.</li>
+<li><strong>GitHub Account:</strong> Create GitHub account (personal or Enterprise)
+<ul>
+<li><strong>Personal GitHub (github.com)</strong> - Recommended for most students
+<ul>
+<li>Access duration: Forever</li>
+<li>Professional identity: Personal brand</li>
+<li>Setup: Simpler (default configuration)</li>
+</ul></li>
+<li><strong>UMN Enterprise GitHub (github.umn.edu)</strong> - Institutional preference
+<ul>
+<li>Access duration: Until graduation</li>
+<li>Professional identity: Institutional affiliation</li>
+<li>Setup: Requires .Rprofile configuration</li>
+</ul></li>
+</ul></li>
+<li><strong>Git:</strong> Install the command-line version of Git from <a href="https://git-scm.com/downloads">git-scm.com</a>.</li>
+<li><strong>Verify Installation:</strong> Open RStudio, go to Tools → Global Options → Git/SVN
+<ul>
+<li><p>Should show path to Git executable</p></li>
+<li><p>If not found, restart RStudio after Git installation</p></li>
+</ul></li>
+</ol>
+</section>
+<section id="verify-your-setup" class="level3">
+<h3 class="anchored" data-anchor-id="verify-your-setup">Verify Your Setup</h3>
+<ol type="1">
+<li>Download the <code>setup-tests_autosave.R</code> script from the course website and save it into the R Project you are using for this assignment.</li>
+<li>Open the <code>setup-tests_autosave.R</code> script in RStudio.</li>
+<li>Run the entire script. You can do this by clicking “Source” at the top of the script editor, or by running <code>source("``setup-tests_autosave.R``")</code> in the console.</li>
+<li>The script will automatically save a summary of your system configuration in a <code>.txt</code> file named <code>assignment0-setup.txt</code>.</li>
+<li>If any tests fail (show a <code>✗</code>), follow the “HOW TO FIX” instructions provided by the script, re-run the script. Continue iterating through the “HOW TO FIX” instructions and re-running the script until you have passed all of the tests. The results from your final successful results will be automatically appended to the <code>assignment0-setup.txt</code> file.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A successful run of the setup-tests_autosave.R script will</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   look something like:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># =========================================</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#    APEC 8221 SETUP VERIFICATION REPORT</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># =========================================</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># DIAGNOSTIC INFORMATION:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># R version: R version 4.5.1 (2025-06-13 ucrt)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># OS:        Windows 11 x64 (build 26100)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># RStudio:   2025.5.1.513</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Date/time: 2025-09-03 09:25:19</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># STUDENT INFORMATION:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Student Name: Ali Joglekar</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># x500 ID:      jogle001</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TEST</span><span class="co"> RESULTS:</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># R Version            | ✅ PASS | R version 4.5.1 (2025-06-13 ucrt) is sufficient (≥ 4.4.0)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># RStudio Version      | ✅ PASS | RStudio version 2025.5.1.513 is sufficient (≥ 2023.06.0)</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Core Packages        | ✅ PASS | All required packages are installed</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># TinyTeX (for PDF)    | ✅ PASS | TinyTeX is installed</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Git Installed        | ✅ PASS | Git executable found by 'gert' package</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Git User Configured  | ✅ PASS | Git user.name is set to: Ali Joglekar</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidyverse Function   | ✅ PASS | dplyr pipe and summarize functions work</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot2 Plotting     | ✅ PASS | ggplot object created successfully</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># File System Write    | ✅ PASS | Can write and read a file successfully</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="verification-results" class="level3">
+<h3 class="anchored" data-anchor-id="verification-results">Verification Results</h3>
+<p>Include your verification results saved in <code>assignment0-setup.txt</code> in your final <code>assignment0.qmd</code> file, using the <code>readLines()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readLines</span>(<span class="st">"assignment0-setup.txt"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="sec-git" class="level1">
+<h1>Part 2: Git Configuration &amp; Authentication</h1>
+<p><em>⚠️ Complete this AFTER Thursday’s Git/GitHub class</em></p>
+<section id="task-1" class="level2">
+<h2 class="anchored" data-anchor-id="task-1">Task</h2>
+<p>Set up Git/GitHub integration and create your first repository (and R Project) for the course.</p>
+</section>
+<section id="instructions-1" class="level2">
+<h2 class="anchored" data-anchor-id="instructions-1">Instructions</h2>
+<p>The steps below summarize the process we will cover in Thursday’s class. For more detailed explanations and troubleshooting, please refer to the ‘Lecture 2: GitHub &amp; Quarto’ notes on Canvas.</p>
+<ol type="1">
+<li><p><strong>Configure Git Identity</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">use_git_config</span>(<span class="at">user.name =</span> <span class="st">"Jane Doe"</span>, <span class="at">user.email =</span> <span class="st">"jane@example.com"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p><strong>Set Up Authentication</strong></p>
+<ul>
+<li><p>Personal GitHub (github.com)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Personal Access Token</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the token</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Enterprise GitHub (github.umn.edu)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure .Rprofile first</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">usethis.protocol =</span> <span class="st">"https"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">usethis.host =</span> <span class="st">"https://github.umn.edu"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">usethis.github_host =</span> <span class="st">"https://github.umn.edu"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create enterprise token</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(<span class="at">host =</span> <span class="st">"https://github.umn.edu"</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the token</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>(<span class="at">url =</span> <span class="st">"https://github.umn.edu"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul></li>
+<li><p><strong>Create a GitHub repository</strong></p>
+<ul>
+<li>Go to <a href="github.com">github.com</a>/<a href="github.umn.edu">github.umn.edu</a> and create a new <strong>private</strong> repository</li>
+<li>Name: <code>apec8221-[your-x500-id]</code> (e.g., <code>apec8221-jogle001</code>)</li>
+<li>Description: “APEC 8221: Programming for Econometrics coursework”</li>
+<li>Initialize with README: Yes</li>
+<li>Add .gitignore: R</li>
+<li>License: None</li>
+</ul></li>
+<li><p><strong>Create new R Project:</strong> In RStudio, click File → New Project → Version Control → Git</p></li>
+<li><p><strong>Enter repository details</strong></p>
+<ul>
+<li><p>Repository URL: Can be found by clicking on the green <code>&lt;&gt; Code</code> button in GitHub</p></li>
+<li><p>Project directory name: <code>apec8221-[your-x500-id]</code> (should autofill)</p></li>
+<li><p>Create project as subdirectory of: Choose your desired location</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>AVOID these locations:</strong>
+<ul>
+<li>Google Drive, OneDrive, Dropbox folders</li>
+<li>Network drives (H:/ drives, etc.)</li>
+<li>External USB drives</li>
+<li>Any folder that syncs to the cloud</li>
+</ul></li>
+<li><strong>RECOMMENDED locations:</strong>
+<ul>
+<li><code>C:/Users/[your-username]/Documents/apec8221-[your-x500-id]/</code></li>
+<li>Your local Documents folder</li>
+<li>Desktop (if you don’t mind it there)</li>
+</ul></li>
+<li><strong>Why this matters:</strong> Cloud sync services interfere with Git’s internal files, causing corruption and mysterious errors. Since you’re already using GitHub for cloud backup and collaboration, additional cloud sync is unnecessary and problematic.</li>
+</ul>
+</div>
+</div></li>
+</ul></li>
+<li><p><strong>Organize your folders/files for the course in your project/repo:</strong></p>
+<p>While you can have some creativity in how you store your course materials, I need everyone to have the same structure when it comes to where your assignment <code>.qmd</code> script files are saved relative to the course data. This makes it easier for me to run and evaluate your scripts.</p>
+<ul>
+<li>Create assignment-related course folders at the root directory-level:
+<ul>
+<li><code>assignments/</code></li>
+<li><code>data/</code></li>
+<li><code>final-project/</code></li>
+</ul></li>
+<li>Create an <code>assignments/assignment0/</code> subfolder, and the following files to this subfolder:
+<ul>
+<li><code>assignment0-instructions.pdf</code></li>
+<li><code>assignment0-template.qmd</code></li>
+<li><code>setup_-tests_autosave.r</code></li>
+<li><code>assignment0-setup.txt</code></li>
+</ul></li>
+<li>Create additional course folders as you see appropriate (e.g., <code>lectures</code>, <code>resources</code>, etc.)</li>
+</ul>
+<pre><code> apec8221-[your-x500-id]/    
+ ├── README.md  
+ ├── lectures/                  # Lecture materials, demos, and scripts
+ │   ├── l1-workflows/ 
+ │   │   ├── lecture1_workflow.html
+ │   │   ├── lecture1_demo.qmd
+ │   │   └── in-class_practice/ 
+ │   ├── l2-github-quarto/
+ │   ├── [additional lecture folders ...]
+ │   └── l14-advanced-topics/
+ ├── assignments/               # Assignment instructions, templates, scripts, and outputs     
+ │   ├── assignment0/
+ │   │   ├── assignment0-instructions.pdf    
+ │   │   ├── assignment0-template.qmd     
+ |   │   ├── setup_-tests_autosave.r    
+ │   │   └── assignment0-setup.txt    
+ │   ├── assignment1/    
+ │   ├── [additional assignment folders ...]
+ │   └── assignment5/   
+ ├── resources/                 # Debugging guides, cheatsheets, setup help  
+ ├── data/                      # Course datasets and examples  
+ ├── final-project/             # Final project guidelines and templates
+ ├── apec8221_syllabus.pdf/     
+ └── .gitignore</code></pre></li>
+<li><p><strong>Commit and push:</strong></p>
+<ul>
+<li>Stage all files in Git tab</li>
+<li>Commit with an informative message, such as “assignment 0 instructions &amp; part 1 files”</li>
+<li>Push to GitHub</li>
+<li>Check your GitHub account online to ensure the files were pushed correctly</li>
+</ul></li>
+<li><p><strong>Collaborator:</strong> Add instructor (<code>joglekar</code>) as collaborator on your repo via GitHub (Settings → Manage access → Invite a collaborator)</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Success Indicators
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>RStudio opens with your project loaded</li>
+<li><strong>Files pane</strong> shows your repository contents (README.md, .gitignore, etc.)</li>
+<li><strong>Git tab</strong> appears in RStudio (usually upper right pane)</li>
+<li><strong>Console</strong> shows you’re in the correct working directory</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="sec-quarto" class="level1">
+<h1>Part 3: Quarto Documents</h1>
+<section id="task-2" class="level2">
+<h2 class="anchored" data-anchor-id="task-2">Task</h2>
+<p>Demonstrate your understanding of Quarto by creating dynamic content that combines text, code, and results.</p>
+</section>
+<section id="instructions-2" class="level2">
+<h2 class="anchored" data-anchor-id="instructions-2">Instructions</h2>
+<ol type="1">
+<li><p>Create a Quarto Document</p>
+<ol type="a">
+<li>In RStudio, go to <code>File -&gt; New File -&gt; Quarto Document...</code>.</li>
+<li>A dialog box will appear. Give it a <strong>Title</strong> (e.g., “My First Report”) and put your name in the <strong>Author</strong> field.</li>
+<li>Leave the output format as <strong>HTML</strong> and click <strong>Create</strong>.</li>
+<li>A new document with some example text will open. Save this file in your R Project as <code>assignment-0-quarto.qmd</code>.</li>
+</ol></li>
+<li><p>Modify this new Quarto document to do the following:</p>
+<ol type="a">
+<li><strong>YAML:</strong> Make sure your name and the title are correct at the top of the file (the part between <code>---</code>).</li>
+<li><strong>Text:</strong> Delete all the example text and code chunks <em>except</em> for the YAML header. Write a sentence or two of your own, such as “This is my first Quarto document for APEC 8221.”</li>
+<li><strong>Code Chunks:</strong>
+<ol type="i">
+<li>Add a new R code chunk that creates the <code>pets</code> data frame from question 2.5. To create a code chunk, you can type <code>```{r}</code> and <code>```</code> or use the shortcut <code>Ctrl+Alt+I</code> (Windows) or <code>Cmd+Option+I</code> (Mac).</li>
+<li>Add a second R code chunk that simply prints the <code>pets</code> data frame.</li>
+<li>Add a final statement that includes an inline statistic about the pets data frame (e.g., maximum age).</li>
+</ol></li>
+</ol>
+<p>A simple version of your final file might look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"My First Quarto Report"</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>author<span class="sc">:</span> <span class="st">"Ali Joglekar"</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>format<span class="sc">:</span> html </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>editor<span class="sc">:</span> visual </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Objective </span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Create my first Quarto document <span class="cf">for</span> APEC <span class="fl">8221.</span>  </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Data  Here is a data frame of pets: </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>pets <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(   </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Fido"</span>, <span class="st">"Whiskers"</span>, <span class="st">"Nemo"</span>),    </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">animal =</span> <span class="fu">c</span>(<span class="st">"Dog"</span>, <span class="st">"Cat"</span>, <span class="st">"Fish"</span>),    </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>) ) </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>Now, let<span class="st">'s see the output when we print the data frame:  </span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="st">## Analysis  </span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="st">The maximum age of the pets is `r max(pets$age)`.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Click the <strong>Render</strong> button at the top of the script editor in RStudio. This will execute your R code and create an HTML file with your text and the code output.</p></li>
+<li><p>Include your simple quarto document in your final <code>assignment0.qmd</code> file via Shortcode (Insert &lt; Shortcode). Type <code>include assignment-quarto.qmd</code> inside the shortcode brackets.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="sec-r-practice" class="level1">
+<h1>Part 4: R Basics Self-Study &amp; Knowledge Check</h1>
+<section id="task-3" class="level2">
+<h2 class="anchored" data-anchor-id="task-3">Task</h2>
+<p>If you already feel that you have a solid grasp on the R basics (assignment, arithmetic, recycling, data types, using basic functions, accessing help pages, logical &amp; relational operations, missing values, etc), feel free to skip the self-study exercise and move straight to the knowledge check.</p>
+<p>If you are new to R or would like a refresher, work through the “R Programming” course of the <a href="https://swirlstats.com/students.html">swirl R package</a>. This will give you a solid grasp of these fundamentals and make the rest of the course much smoother. After your self-study, answer the knowledge check questions below.</p>
+</section>
+<section id="r-basics-self-study-w-swirl" class="level2">
+<h2 class="anchored" data-anchor-id="r-basics-self-study-w-swirl">R Basics Self-Study w/ <code>swirl</code></h2>
+<ol type="1">
+<li><p>Install and launch <code>swirl</code> by running the following in your R console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"swirl"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(swirl)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">swirl</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>When prompted, install the <strong>“R Programming”</strong> <a href="https://swirlstats.com/scn/rprog.html">course</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>swirl<span class="sc">::</span><span class="fu">install_course</span>(<span class="st">"R Programming"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">swirl</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Complete the following nine (9) lessons from the “R Programming” course:</p>
+<ul>
+<li>1: Basic Building Blocks</li>
+<li>2: Workspace and Files</li>
+<li>3: Sequences of Numbers</li>
+<li>4: Vectors</li>
+<li>5: Missing Values</li>
+<li>6: Subsetting Vectors</li>
+<li>7: Matrices and Data Frames</li>
+<li>8: Logic</li>
+<li>12: Looking at Data</li>
+</ul>
+<p>When asked “Would you like to receive credit for completing this course on Coursera.org?”, you can reply <code>1: No</code>.</p></li>
+</ol>
+</section>
+<section id="knowledge-check" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
+<ol type="1">
+<li><p><strong>Objects and Assignment:</strong> What is the primary assignment operator in R? Create a new code chunk below and use it to create an object named `my_age` that holds your age in years.</p></li>
+<li><p><strong>Vectors:</strong> What is the purpose of the <code>c()</code> function in R? In the code chunk below, use the <code>c()</code> function to create a vector named <code>favorite_numbers</code> containing three of your favorite numbers.</p></li>
+<li><p><strong>Subsetting Vectors:</strong> Write the code that would select the <em>second</em> number from the <code>favorite_numbers</code> vector you just created.</p></li>
+<li><p><strong>Missing Values and Logic:</strong> The code chunk below creates a vector with missing values (<code>NA</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This vector is for the exercise. Run it in your console.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="cn">NA</span>, <span class="dv">10</span>, <span class="cn">NA</span>, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="a">
+<li>Write a line of code that returns a logical vector (<code>TRUE</code>/<code>FALSE</code>) indicating which elements are missing.</li>
+<li>Write a line of code that <em>counts</em> how many total missing values are in the vector.</li>
+</ol></li>
+<li><p><strong>Data Frames and Inspection:</strong> The code chunk below creates a simple data frame called <code>pets</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This data frame is for the exercise. Run it in your console.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pets <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Fido"</span>, <span class="st">"Whiskers"</span>, <span class="st">"Nemo"</span>), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">animal =</span> <span class="fu">c</span>(<span class="st">"Dog"</span>, <span class="st">"Cat"</span>, <span class="st">"Fish"</span>), </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="a">
+<li>Use a function to look at the first few rows of the data frame.</li>
+<li>Use a function to get a summary of the structure of the data frame.</li>
+<li>Write the code to select <em>only</em> the <code>age</code> column from the data frame.</li>
+</ol></li>
+<li><p><strong>Workspace and Files:</strong></p>
+<ol type="a">
+<li>What function would you use to see a list of all the objects currently in your R environment?</li>
+<li>What function would you use to find out your current working directory?</li>
+</ol></li>
+<li><p><strong>Getting Help:</strong> Which function in R can you use to open the help documentation for another function? In the code chunk below, write the code you would use to see the help file for the <code>mean()</code> function.</p></li>
+</ol>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

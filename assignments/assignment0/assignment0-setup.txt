@@ -1,0 +1,46 @@
+=========================================
+--- FIRST ATTEMPT ---
+=========================================
+=========================================
+   APEC 8221 SETUP VERIFICATION REPORT
+=========================================
+
+DIAGNOSTIC INFORMATION:
+-----------------------
+R version: R version 4.5.1 (2025-06-13)
+OS:        macOS Sequoia 15.5
+RStudio:   2025.5.1.513
+Date/time: 2025-09-07 17:21:25
+
+STUDENT INFORMATION:
+--------------------
+Student Name: Yunshu Yang
+x500 ID:      yang9291
+
+TEST RESULTS:
+--------------------
+R Version            | ✅ PASS | R version 4.5.1 (2025-06-13) is sufficient (≥ 4.4.0)
+RStudio Version      | ✅ PASS | RStudio version 2025.5.1.513 is sufficient (≥ 2023.06.0)
+Core Packages        | ❌ FAIL | Missing packages: quarto, usethis
+TinyTeX (for PDF)    | ❌ FAIL | TinyTeX installation not found
+Git Installed        | ❌ FAIL | Git executable not found by the 'gert' package
+Git User Configured  | ✅ PASS | Git user.name is set to: Yunshu Yang
+Tidyverse Function   | ✅ PASS | dplyr pipe and summarize functions work
+ggplot2 Plotting     | ✅ PASS | ggplot object created successfully
+File System Write    | ✅ PASS | Can write and read a file successfully
+
+=========================================
+   NEXT STEPS: HOW TO FIX FAILURES
+=========================================
+
+For 'Core Packages' failure:
+  → Install missing packages by running this command in the console:
+    install.packages(c('quarto', 'usethis'))
+
+For 'TinyTeX (for PDF)' failure:
+  → Run this command in the console: tinytex::install_tinytex()
+
+For 'Git Installed' failure:
+  → Download and install Git from: https://git-scm.com/downloads
+  → After installing, completely CLOSE and REOPEN RStudio.
+
