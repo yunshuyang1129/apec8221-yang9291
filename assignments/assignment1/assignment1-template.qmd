@@ -1,0 +1,236 @@
+---
+title: "APEC 8221 - Assignment 1: Tidyverse Fundamentals"
+author: "[REPLACE WITH YOUR NAME]"
+date: today
+format: 
+  pdf:
+    number-sections: true
+    colorlinks: true
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  eval: true
+  echo: true
+editor: visual
+---
+
+```{=html}
+<!-- 
+Before you begin:
+1. Save this file as assignment1-[your-x500-id].qmd
+2. Replace "[REPLACE WITH YOUR NAME]" above with your actual name
+3. Make sure you're working in your course R Project
+4. Include your GitHub repository URL in Canvas submission
+-->
+```
+
+**GitHub Repository URL:** \[Insert your repository URL here\]
+
+# Setup
+
+```{r}
+#| label: setup
+
+# Load required packages
+library(tidyverse)
+library(gapminder)
+
+# Check data structure
+glimpse(gapminder)
+```
+
+# Data Analysis & Visualization Practice
+
+## Top Performers Identification
+
+Find the top 3 countries in each continent for highest life expectancy and highest GDP per capita in 2007.
+
+### Highest Life Expectancy by Continent (2007)
+
+```{r}
+#| label: top-life-exp
+
+# Your code here - find top 3 countries by life expectancy in each continent
+# Remember to use group_by(), arrange(), and slice_head()
+
+```
+
+### Highest GDP per Capita by Continent (2007)
+
+```{r}
+#| label: top-gdp
+
+# Your code here - find top 3 countries by GDP per capita in each continent
+
+```
+
+**Brief analysis:** *\[Write 2-3 sentences about what patterns you notice in the top performers\]*
+
+## Development Progress Visualization
+
+Create a scatter plot comparing each country's 1952 vs. 2007 life expectancy.
+
+```{r}
+#| label: life-exp-data-prep
+
+# Step 1: Create separate data frames for 1952 and 2007
+lifeExp_1952 <- gapminder %>%
+  # Your code here - filter for 1952 and select relevant columns
+
+lifeExp_2007 <- gapminder %>%
+  # Your code here - filter for 2007 and select relevant columns (include population!)
+
+# Step 2: Combine using provided left_join code
+lifeExp_data <- left_join(lifeExp_1952, lifeExp_2007, by = "country")
+
+# Step 3: Handle missing data
+lifeExp_data <- lifeExp_data %>%
+  # Your code here - remove countries with missing data using filter()
+
+```
+
+```{r}
+#| label: life-exp-plot
+#| fig-width: 10
+#| fig-height: 8
+
+# Create the scatter plot
+ggplot(lifeExp_data, aes(x = lifeExp_1952, y = lifeExp_2007)) +
+  # Your code here - add the diagonal reference line using geom_abline()
+  # Add points with color by continent and size by population
+  # Add professional labels and theme
+
+```
+
+**Analysis:** *\[Write 2-3 sentences explaining what the plot shows about global health progress\]*
+
+## Development Progress Classification
+
+Using the `lifeExp_data` from Task 2.1.2, classify countries by improvement level.
+
+```{r}
+#| label: life-exp-classification
+
+# Add classification to your existing lifeExp_data
+lifeExp_data <- lifeExp_data %>%
+  mutate(
+    improvement_level = case_when(
+      # Your code here - use the provided classification logic
+      # Major Improvement: 30+ years gained
+      # Moderate Improvement: 15-29 years gained  
+      # Minor Improvement: 0-14 years gained
+      # Decline: Lost life expectancy
+    )
+  )
+
+# Create summary table
+improvement_summary <- lifeExp_data %>%
+  # Your code here - group by continent and improvement_level, count countries
+
+print(improvement_summary)
+```
+
+### Analysis Questions
+
+**1. Which continent has the most countries with "Major Improvement"?**
+
+```{r}
+#| label: major-improvement-analysis
+
+# Your code here - analyze major improvement by continent
+
+```
+
+\[Your answer here\]
+
+**2. Are there any countries that experienced decline? Which ones and why might this have happened?**
+
+```{r}
+#| label: decline-analysis
+
+# Your code here - find and examine countries with decline
+
+```
+
+*\[Your answer here\]*
+
+**3. What does this tell us about global health convergence?**
+
+*\[Your answer here - 2-3 sentences about convergence patterns\]*
+
+## Economic Development Trajectories
+
+Create a line plot showing life expectancy changes over time for selected countries.
+
+### Step 1: Guided Discovery
+
+```{r}
+#| label: trajectory-discovery
+
+# Find interesting countries for your plot
+life_exp_changes <- lifeExp_data %>%
+  # Your code here - calculate change and identify top/bottom performers
+
+# Print top gainers and any decliners
+# Your code here
+
+```
+
+### Step 2: Create Trajectory Visualization
+
+```{r}
+#| label: trajectory-plot
+#| fig-width: 10
+#| fig-height: 6
+
+# Select 5-6 interesting countries based on your discovery
+selected_countries <- c(
+  # Your countries here - include top gainer, any decliner, and 3-4 others of interest
+)
+
+trajectory_data <- gapminder %>%
+  # Your code here - filter for selected countries
+
+# Create line plot
+ggplot(trajectory_data, aes(x = year, y = lifeExp, color = country)) +
+  # Your code here - add lines, points, and professional labeling
+
+```
+
+**Caption:** *\[Write 2-3 sentences explaining why you selected these countries and what pattern stands out\]*
+
+# Research Discovery & Critical Analysis
+
+## Choose Your Research Question
+
+**Selected Research Question:** *\[A, B, C, D, or E\]*
+
+*\[State your own research question here\]*
+
+## Research Analysis
+
+### Data Analysis
+
+```{r}
+#| label: research-analysis
+
+# Your code here - use appropriate dplyr operations to investigate your question
+# This should include filtering, grouping, summarizing, and/or calculating as needed
+
+```
+
+### Visualization
+
+```{r}
+#| label: research-plot
+#| fig-width: 8
+#| fig-height: 6
+
+# Your code here - create one clear plot that supports your findings
+
+```
+
+### Interpretation (150-200 words)
+
+*\[Your interpretation here - explain what you found, why it's interesting, potential explanations for the pattern, and any limitations of your analysis\]*

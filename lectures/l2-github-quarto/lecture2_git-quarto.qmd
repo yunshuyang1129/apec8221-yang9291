@@ -1,0 +1,688 @@
+---
+title: "Lecture 2: Literate Programming & Version Control可读化编程和版本控制"
+subtitle: "APEC 8221: Programming for Econometrics"
+author: "Ali Joglekar"
+date: "September 4, 2025"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+  eval: true
+  echo: true
+editor: visual
+---
+
+# ![](images/clipboard-1881625432.png){width="370"}![](images/clipboard-2829523075.png){width="341"}
+
+# Opening & Check-In
+
+## Status Check
+
+**Quick show of hands:** Who completed the Software Installation & Verification exercise successfully?
+
+> If anyone is still having issues with Parts 1, send me an email - we'll get it sorted before Monday.
+
+## Today's Mission
+
+Today we're adding the final two pieces to your reproducible workflow: **Quarto** for combining code and narrative, and **Git** for version control and collaboration.
+
+::: callout-important
+You can use either **Personal GitHub** (github.com) or **UMN Enterprise GitHub** (github.umn.edu) for this course. Both work perfectly fine - it's your preference.
+:::
+
+**Git authentication is tricky** regardless of which account type you choose. Almost everyone has issues the first time. That's why we're doing this together in class rather than making you struggle alone at home.
+
+By the end of today, you'll have your first reproducible document pushed to GitHub.
+
+![](images/clipboard-2303076159.png){width="431"}
+
+![](images/clipboard-2360024235.png){width="422"}
+
+# Quarto Basics & Git Demo (`I Do`)
+
+## Quarto Philosophy & Demo
+
+### Quarto Motivation
+
+-   Traditional research workflow: Write code in R, copy results to Word, manually create figures, pray nothing changes.
+-   Quarto workflow: Code, narrative, and results live in one document that updates automatically.
+
+#### Why this matters
+
+-   No copy-paste errors between R and PowerPoint
+-   Automatic updates when data changes
+-   Reproducible presentations for colleagues
+-   Professional workflow used in industry
+
+![](images/clipboard-258911714.png){width="317"}
+
+#### When to use Quarto
+
+**Dissertation & Thesis Work**
+
+-   Reproducible chapters with embedded analysis, tables, and figures that update automatically when data changes
+-   Appendices with code showing exactly how results were generated for committee review
+-   Methodology sections that combine narrative explanation with actual code implementation
+
+**Journal Article Submission**
+
+-   Supplementary materials that journals increasingly require showing reproducible analysis
+-   Replication files that many journals now mandate for publication
+-   Pre-prints and working papers shared on platforms like arXiv, SSRN, or RePEc
+
+**Conference Presentations**
+
+-   Research presentations that seamlessly integrate live code demonstrations with slides
+-   Poster sessions where QR codes link to interactive, reproducible analyses
+-   Workshop materials for teaching methods to other researchers
+
+![](images/clipboard-1059850831.png){width="466"}
+
+#### ![](images/clipboard-20851582.png){width="466"}
+
+#### Specific professional scenarios
+
+**The "Oh No, the Data Updated" Scenario**
+
+You're at the Minneapolis Fed. Your quarterly economic outlook report is due to the president tomorrow, but the BLS just released revised employment data.
+
+With Quarto: change one data file, re-render, done. Without Quarto: manually update 47 charts and tables, hope you don't miss any.
+
+**The "Explain Your Methodology" Scenario**
+
+You're testifying before Congress about your economic impact analysis. A representative asks "How exactly did you calculate that \$2.3 billion figure?"
+
+With Quarto: "Here's the exact code, data, and methodology - all publicly available." This builds credibility and trust.
+
+**The "Replication Crisis" Scenario**
+
+You're submitting to the American Economic Review. The editor asks for replication files.
+
+With Quarto skills: send a single document that regenerates every table and figure from raw data. Without: scramble to find old code, hope it still works, spend weeks reconstructing your analysis.
+
+**The "Team Collaboration" Scenario**
+
+You're at a consulting firm with 5 economists working on different sections of a client report.
+
+With Quarto: everyone works on their section, integrates seamlessly, consistent formatting. Without: nightmare of merging Word documents and rebuilding broken figures.
+
+![](images/clipboard-3740567889.png){width="457"}
+
+### Create Basic Quarto Document Demo
+
+Quarto document consists of two parts:
+
+**YAML头部，包括文档的基本信息**
+
+```         
+---
+title: "Lecture 2 Demo: Reproducible Research"
+author: "Ali Joglekar"
+date: today
+format: pdf
+---
+```
+
+**Markdown**
+
+````         
+# Why Quarto Matters文本部分
+
+This document combines **narrative text** with executable code.
+
+## A Simple Analysis
+
+```{r}代码块
+library(tidyverse)
+data(mtcars)
+
+# Calculate summary statistics
+mpg_summary <- mtcars %>%
+  summarise(
+    mean_mpg = mean(mpg),
+    median_mpg = median(mpg),
+    n_cars = n()
+  )
+
+print(mpg_summary)
+
+# Store values for inline use，方便后面在文字里引用
+mean_mpg_value <- mpg_summary$mean_mpg
+```
+
+The average fuel economy is `{r} round(mean_mpg_value, 1)` miles per gallon. 
+
+This value was calculated directly from the data and will update automatically if the data changes!结果会随数据更新而自动刷新
+
+
+## A Simple Plot绘图部分➕代码块
+
+```{r}
+ggplot(mtcars, aes(x = mpg, y = hp)) +
+  geom_point(aes(color = factor(cyl))) +
+  labs(
+    title = "Horsepower vs. Fuel Economy",
+    x = "Miles per Gallon",
+    y = "Horsepower",
+    color = "Cylinders"
+  ) +
+  theme_minimal()
+```
+
+This plot shows the relationship between fuel economy and engine power.
+````
+
+### Render the Document
+
+Watch what happens when I render this... (Click Render)
+
+See how the code runs, results appear, and everything is formatted professionally?
+
+![](images/clipboard-746847539.png){width="252"}
+
+### What about Slides?
+
+1.  **Change format** from `pdf` to `revealjs`
+2.  **Add slide breaks切分幻灯片** using `---`
+3.  **Enhance code chunks** with:
+    -   `#| echo: true` to show code
+    -   `#| code-line-numbers: "1-3|4-10|12"` for progressive highlighting
+    -   `#| fig-width: 8` and `#| fig-height: 5` for better plot sizing
+4.  **Split content** into logical slide chunks
+
+![](images/clipboard-558643609.png){width="361"}
+
+````         
+---
+title: "Lecture 2 Demo: Reproducible Research"
+author: "Ali Joglekar"
+date: today
+format:
+  revealjs:输出网页幻灯片
+    theme: dark黑色主题
+    slide-number: true 每页显示页码
+    chalkboard: true 支持在幻灯片写批注
+    code-fold: false 代码不能折叠
+    code-overflow: wrap 长代码会自动换行，不跑出屏幕
+---第一张结束
+
+# Why Quarto Matters
+
+This document combines **narrative text** with executable code.
+
+---第二张结束
+
+## A Simple Analysis
+
+```{r}
+#| echo: true 会显示代码
+#| code-line-numbers: "1-3|4-10|12" 演示时分三步高亮，代码会逐行高亮，方便观众跟着思路走
+library(tidyverse)
+data(mtcars)
+
+# Calculate summary statistics
+mpg_summary <- mtcars %>%
+  summarise(
+    mean_mpg = mean(mpg),
+    median_mpg = median(mpg),
+    n_cars = n()
+  )
+
+print(mpg_summary)
+```
+
+```{r}
+#| echo: false
+
+# Store values for inline use
+mean_mpg_value <- mpg_summary$mean_mpg
+```
+
+---第三张结束
+
+## Key Finding
+
+The average fuel economy is `{r} round(mean_mpg_value, 1)` miles per gallon. 
+
+This value was calculated directly from the data and will update automatically if the data changes!
+
+---第四张结束
+
+## A Simple Plot
+
+```{r}
+#| echo: false不显示代码，只展示图标
+#| fig-width: 8
+#| fig-height: 5控制图标大小
+
+
+ggplot(mtcars, aes(x = mpg, y = hp)) +
+  geom_point(aes(color = factor(cyl)), size = 3) +
+  labs(
+    title = "Horsepower vs. Fuel Economy",
+    x = "Miles per Gallon",
+    y = "Horsepower",
+    color = "Cylinders"
+  ) +
+  theme_minimal()简洁主题
+```
+
+---第五张结束
+
+## Key Insight
+
+This plot shows the relationship between fuel economy and engine power.第六张自动结束
+````
+
+## Versioning with Git Demo
+
+Quarto solves the 'code + narrative' problem. Git solves the 'collaboration + history' problem.
+
+-   Git is like a sophisticated "Save As" system
+-   Repository = Project folder with full history
+-   Commit = Saved snapshot with description
+-   Push = Upload your changes to GitHub
+-   Pull = Download others' changes from GitHub
+
+![](images/clipboard-1808213068.png){width="360"}
+
+### Creating a Git Repository新仓库
+
+#### Personal GitHub Demo:
+
+Let me show you the basic Git workflow using Personal GitHub first - this is what most students will use.
+
+**Create new GitHub repository on github.com:**
+
+-   Go to github.com → New Repository
+-   Name: "lecture2-demo-personal"
+-   Private repository
+-   Initialize with README: Yes
+-   Add .gitignore: R
+
+![](images/clipboard-2015838355.png)
+
+![](images/clipboard-292444628.png){width="455"}
+
+<https://github.com/yunshuyang1129/lecture2-demo-personal.git>
+
+**Clone to RStudio:** 就是在你电脑上生成一个“本地副本”。这个副本要放在一个干净的本地文件夹里（Documents/桌面），不要放在其他云盘里。
+
+-   In RStudio: File → New Project → Version Control → Git
+
+-   Repository URL: <https://github.com/%5Busername%5D/lecture2-demo-personal.git>
+
+-   Choose location and create project
+
+-   我命名成了lecture2
+
+::: callout-caution
+**AVOID these locations:**
+
+-   Google Drive, OneDrive, Dropbox folders
+
+-   Network drives (H:/ drives, etc.)
+
+-   External USB drives
+
+-   Any folder that syncs to the cloud
+
+**RECOMMENDED locations:**
+
+-   C:/Users/\[your-username\]/Documents/apec8221-\[your-x500-id\]/
+
+-   Your local Documents folder
+
+-   Desktop (if you don't mind it there)
+
+**Why this matters:** Cloud sync services interfere with Git's internal files, causing corruption and mysterious errors. Since you're already using GitHub for cloud backup and collaboration, additional cloud sync is unnecessary and problematic.
+:::
+
+**Configure R for GitHub:**
+
+```{r}
+#| eval: false
+
+# Personal GitHub is the default - no special setup needed!
+library(usethis)
+
+# Check current configuration
+git_sitrep()  
+# Should show "Default GitHub host: https://github.com"
+
+# Create token for github.com
+create_github_token(
+  scopes = c("repo", "user", "workflow"),
+  description = "Demo-Personal-Access"
+)
+```
+
+**Verify it Worked:**
+
+```{r}
+#| eval: false
+
+# Test your setup
+gh::gh_whoami()
+gh::gh_whoami(.api_url = 'https://github.umn.edu/api/v3') #不行
+gh::gh_whoami(.api_url = 'https://github.com/api/v3') #可以
+```
+
+Should return your user information if working correctly.
+
+#### Enterprise GitHub Demo:
+
+Now let me show the Enterprise GitHub setup for those who prefer institutional accounts.
+
+**Create new GitHub repository on github.umn.edu:**
+
+-   Go to github.umn.edu → New Repository
+-   Name: "lecture2-demo-enterprise"
+-   Private repository
+-   Initialize with README: Yes
+-   Add .gitignore: R
+
+**Clone to RStudio:**
+
+-   In RStudio: File → New Project → Version Control → Git
+
+-   Repository URL: <https://github.umn.edu/%5Busername%5D/lecture2-demo-enterprise.git>
+
+-   Choose location and create project
+
+**Configure R for Enterprise GitHub:**
+
+```{r}
+#| eval: false
+
+
+# Enterprise requires special configuration
+library(usethis)
+
+# Configure .Rprofile for enterprise
+usethis::edit_r_profile()
+
+# Show adding these lines:
+# options(
+#   usethis.protocol = "https",
+#   usethis.host = "https://github.umn.edu",
+#   usethis.github_host = "https://github.umn.edu"
+# )
+
+# Restart R to load changes
+
+# Create enterprise token
+create_github_token(
+  host = "https://github.umn.edu",
+  scopes = c("repo", "user", "workflow"),
+  description = "Demo-Enterprise-Access"
+)
+
+# Store enterprise token
+gitcreds::gitcreds_set(url = "https://github.umn.edu")
+```
+
+**Verify it Worked:**
+
+```{r}
+#| eval: false
+
+
+# Test your setup
+gh::gh_whoami(.api_url = 'https://github.umn.edu/api/v3')
+```
+
+Should return your user information if working correctly.
+
+### Git Cycle
+
+This is the basic cycle: **Edit → Stage → Commit → Push**. The process is identical regardless of which GitHub account type you choose.
+
+1.  Add file(s)
+2.  Stage the file (check the box in the `Git` tab – found in Environment pane)
+3.  Click **Commit** (review changes opens in a new window).
+4.  Write commit message: "Add first reproducible analysis"
+5.  Click **Commit**
+6.  Click **Push**
+7.  Revise file(s)
+8.  **Stage → Commit → Push**
+
+# Collaborative Git Setup by Account Type (`We Do`)
+
+Quick show of hands:
+
+-   Who is using **Personal GitHub** (github.com)? This is recommended for most students.
+-   Who is using **UMN Enterprise GitHub** (github.umn.edu)?
+
+Great! Now let's work through setup for each group.
+
+## Personal GitHub Group:
+
+```{r}
+#| eval: false
+
+
+# Personal GitHub users - this should be straightforward
+library(usethis)
+
+# Step 1: Check configuration (should already be correct)
+git_sitrep()
+# Should show: Default GitHub host: "https://github.com"
+
+# Step 2: Create token (opens github.com)
+create_github_token(
+  scopes = c("repo", "user", "workflow"),
+  description = "APEC8221-Personal-Access"
+)
+
+# Step 3: Store token
+gitcreds::gitcreds_set()
+
+# Step 4: Test connection
+gh::gh_whoami()
+```
+
+## Enterprise GitHub Group:
+
+```{r}
+#| eval: false
+
+
+# Enterprise GitHub users - need special configuration
+library(usethis)
+
+# Step 1: Configure .Rprofile
+usethis::edit_r_profile()
+
+# Add these lines to .Rprofile:
+# options(
+#   usethis.protocol = "https",
+#   usethis.host = "https://github.umn.edu", 
+#   usethis.github_host = "https://github.umn.edu"
+# )
+
+# Step 2: Restart R (Session → Restart R)
+
+# Step 3: Create enterprise token
+create_github_token(
+  host = "https://github.umn.edu",
+  scopes = c("repo", "user", "workflow"),
+  description = "APEC8221-Enterprise-Access"  
+)
+
+# Step 4: Store enterprise token
+gitcreds::gitcreds_set(url = "https://github.umn.edu")
+
+# Step 5: Test enterprise connection
+gh::gh_whoami(.api_url = "https://github.umn.edu/api/v3")
+```
+
+# Create Course Repository by Account Type (`You Do`)
+
+Now you're going to create your course repository using your existing GitHub account.
+
+::: callout-tip
+Remember: **authentication issues are normal for both account types** - I'm here to help.
+:::
+
+## For Personal GitHub Users (github.com):
+
+### Step 1: Create Repository
+
+-   Go to **github.com**
+-   Click "New Repository"
+-   Name: `apec8221-[your-umn-id]` (e.g., `apec8221-smith123`)
+-   Description: "APEC 8221 Programming for Econometrics coursework"
+-   **IMPORTANT: Make it PRIVATE**
+-   Initialize with README: Yes
+-   Add .gitignore: R
+
+### Step 2: Add Collaborator
+
+-   Settings → Manage access → Invite collaborator
+-   Username: `joglekar`
+-   Send invitation
+
+### Step 3: Clone to RStudio
+
+-   Copy repository URL: `https://github.com/[your-username]/apec8221-[umn-id].git`
+-   In RStudio: File → New Project → Version Control → Git
+-   Paste URL, choose location, create project
+
+## For Enterprise GitHub Users (github.umn.edu):
+
+### Step 1: Create Repository
+
+-   Go to **github.umn.edu**
+-   Name: `apec8221-[your-umn-id]` (e.g., `apec8221-smith123`)
+-   Description: "APEC 8221 Programming for Econometrics coursework"
+-   **IMPORTANT: Make it PRIVATE**
+-   Initialize with README: Yes
+-   Add .gitignore: R
+
+### Step 2: Add Collaborator
+
+-   Username: `joglekar` (same for both account types)
+
+### Step 3: Clone to RStudio
+
+-   Copy repository URL: `https://github.umn.edu/[your-username]/apec8221-[umn-id].git`
+-   In RStudio: File → New Project → Version Control → Git
+-   Paste URL, choose location, create project
+
+# Backup Document in GitHub (`You Do`)
+
+## Step 1: Create First Quarto Document
+
+-   In RStudio: File → New File → Quarto
+-   Document Title: "APEC 8221 - My Research Workflow"
+-   Save as: hello_quarto.qmd
+
+**Use this content:**
+
+````         
+---
+title: "APEC 8221 - My Research Workflow"
+author: "[Your Name]"
+date: today
+format: pdf
+---
+
+# Introduction
+
+This is my first reproducible document for APEC 8221 using [Personal/Enterprise] GitHub.
+
+## Basic R Skills
+
+```{r}
+# Demonstrate basic R commands
+library(tidyverse)
+
+# Create some data
+my_data <- data.frame(
+  x = 1:10,
+  y = (1:10)^2 + rnorm(10, 0, 5)
+)
+
+# Summary statistics
+summary(my_data)
+
+# Store values for inline use
+mean_x <- mean(my_data$x)
+```
+
+The average of variable `x` is `{r} round(mean_x, 1)`. 
+
+## My First Plot
+
+```{r}
+ggplot(my_data, aes(x = x, y = y)) +
+  geom_point(size = 3, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "My First Reproducible Plot",
+    x = "X Variable",
+    y = "Y Variable"
+  ) +
+  theme_minimal()
+```
+````
+
+## Step 2: Git Workflow Practice (Same for Both Account Types)
+
+1.  Render the document (make sure it works!)
+2.  Look at Git tab - see the new files?
+3.  Stage the files (check boxes for `.qmd` and `.pdf/.html`)
+4.  Commit with message: "Add first reproducible analysis with \[Personal/Enterprise\] GitHub"
+5.  Push to GitHub (authentication happens here!)
+
+## Account-Specific Troubleshooting During Exercise:
+
+### Personal GitHub Issues:
+
+-   **Token problems:** Make sure `create_github_token()` opened [github.com](https:/github.com) (not [github.umn.edu](https://github.umn.edu))
+-   **Repository URL:** Should start with `https://github.com/` (not github.umn.edu)
+-   **Test command:** `gh::gh_whoami()` (no additional parameters needed)
+
+### Enterprise GitHub Issues:
+
+-   **Wrong host:** Check that `git_sitrep()` shows github.umn.edu as default host
+-   **Token problems:** Make sure `create_github_token(host = "https://github.umn.edu")` opened the enterprise site
+-   **Repository URL:** Should start with `https://github.umn.edu/`
+-   **Test command:** `gh::gh_whoami(.api_url = "https://github.umn.edu/api/v3")`
+
+# Wrap-up
+
+## Check Success by Account Type:
+
+Quick show of hands:
+
+-   Personal GitHub users who successfully pushed to github.com?
+-   Enterprise GitHub users who successfully pushed to github.umn.edu?
+
+If you didn't get there today with either account type, **don't panic**. Post your issue on the Canvas discussion board or email me your exact error message **and which account type you're using**. We'll get it working.
+
+## Assignment 0 Part 4:
+
+Now you can complete the rest of Assignment 0.
+
+## Reading Assignment for Tuesday:
+
+Tuesday we dive into data manipulation with `dplyr` - the heart of `tidyverse`.
+
+For Tuesday's class on data manipulation, please read:
+
+-   **R4DS Chapter 3 (Data Transformation)** - the core `dplyr` verbs we'll use constantly
+
+-   **R4DS Chapter 7 (Data Import)** - reading files with `readr`
+
+-   **R4DS Chapter 27.2-27.3 (A Field Guide to Base R)** - selecting elements from vectors and data frames
+
+Chapter 3 is the most important - focus there if you're short on time. We'll be using `filter()`, `select()`, `mutate()`, `group_by()`, and `summarise()` extensively.

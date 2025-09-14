@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ali Joglekar">
+<meta name="dcterms.date" content="2025-09-04">
+
+<title>Lecture 2: Literate Programming &amp; Version Control</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="lecture2_git-quarto_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture2_git-quarto_files/libs/quarto-html/quarto.js"></script>
+<script src="lecture2_git-quarto_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture2_git-quarto_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="lecture2_git-quarto_files/libs/quarto-html/anchor.min.js"></script>
+<link href="lecture2_git-quarto_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture2_git-quarto_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lecture2_git-quarto_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="lecture2_git-quarto_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="lecture2_git-quarto_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#opening-check-in" id="toc-opening-check-in" class="nav-link active" data-scroll-target="#opening-check-in"><span class="header-section-number">1</span> Opening &amp; Check-In</a>
+  <ul class="collapse">
+  <li><a href="#status-check" id="toc-status-check" class="nav-link" data-scroll-target="#status-check"><span class="header-section-number">1.1</span> Status Check</a></li>
+  <li><a href="#todays-mission" id="toc-todays-mission" class="nav-link" data-scroll-target="#todays-mission"><span class="header-section-number">1.2</span> Today’s Mission</a></li>
+  </ul></li>
+  <li><a href="#quarto-basics-git-demo-i-do" id="toc-quarto-basics-git-demo-i-do" class="nav-link" data-scroll-target="#quarto-basics-git-demo-i-do"><span class="header-section-number">2</span> Quarto Basics &amp; Git Demo (<code>I Do</code>)</a>
+  <ul class="collapse">
+  <li><a href="#quarto-philosophy-demo" id="toc-quarto-philosophy-demo" class="nav-link" data-scroll-target="#quarto-philosophy-demo"><span class="header-section-number">2.1</span> Quarto Philosophy &amp; Demo</a>
+  <ul class="collapse">
+  <li><a href="#quarto-motivation" id="toc-quarto-motivation" class="nav-link" data-scroll-target="#quarto-motivation"><span class="header-section-number">2.1.1</span> Quarto Motivation</a></li>
+  <li><a href="#create-basic-quarto-document-demo" id="toc-create-basic-quarto-document-demo" class="nav-link" data-scroll-target="#create-basic-quarto-document-demo"><span class="header-section-number">2.1.2</span> Create Basic Quarto Document Demo</a></li>
+  <li><a href="#render-the-document" id="toc-render-the-document" class="nav-link" data-scroll-target="#render-the-document"><span class="header-section-number">2.1.3</span> Render the Document</a></li>
+  <li><a href="#what-about-slides" id="toc-what-about-slides" class="nav-link" data-scroll-target="#what-about-slides"><span class="header-section-number">2.1.4</span> What about Slides?</a></li>
+  </ul></li>
+  <li><a href="#versioning-with-git-demo" id="toc-versioning-with-git-demo" class="nav-link" data-scroll-target="#versioning-with-git-demo"><span class="header-section-number">2.2</span> Versioning with Git Demo</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-git-repository" id="toc-creating-a-git-repository" class="nav-link" data-scroll-target="#creating-a-git-repository"><span class="header-section-number">2.2.1</span> Creating a Git Repository</a></li>
+  <li><a href="#git-cycle" id="toc-git-cycle" class="nav-link" data-scroll-target="#git-cycle"><span class="header-section-number">2.2.2</span> Git Cycle</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#collaborative-git-setup-by-account-type-we-do" id="toc-collaborative-git-setup-by-account-type-we-do" class="nav-link" data-scroll-target="#collaborative-git-setup-by-account-type-we-do"><span class="header-section-number">3</span> Collaborative Git Setup by Account Type (<code>We Do</code>)</a>
+  <ul class="collapse">
+  <li><a href="#personal-github-group" id="toc-personal-github-group" class="nav-link" data-scroll-target="#personal-github-group"><span class="header-section-number">3.1</span> Personal GitHub Group:</a></li>
+  <li><a href="#enterprise-github-group" id="toc-enterprise-github-group" class="nav-link" data-scroll-target="#enterprise-github-group"><span class="header-section-number">3.2</span> Enterprise GitHub Group:</a></li>
+  </ul></li>
+  <li><a href="#create-course-repository-by-account-type-you-do" id="toc-create-course-repository-by-account-type-you-do" class="nav-link" data-scroll-target="#create-course-repository-by-account-type-you-do"><span class="header-section-number">4</span> Create Course Repository by Account Type (<code>You Do</code>)</a>
+  <ul class="collapse">
+  <li><a href="#for-personal-github-users-github.com" id="toc-for-personal-github-users-github.com" class="nav-link" data-scroll-target="#for-personal-github-users-github.com"><span class="header-section-number">4.1</span> For Personal GitHub Users (github.com):</a>
+  <ul class="collapse">
+  <li><a href="#step-1-create-repository" id="toc-step-1-create-repository" class="nav-link" data-scroll-target="#step-1-create-repository"><span class="header-section-number">4.1.1</span> Step 1: Create Repository</a></li>
+  <li><a href="#step-2-add-collaborator" id="toc-step-2-add-collaborator" class="nav-link" data-scroll-target="#step-2-add-collaborator"><span class="header-section-number">4.1.2</span> Step 2: Add Collaborator</a></li>
+  <li><a href="#step-3-clone-to-rstudio" id="toc-step-3-clone-to-rstudio" class="nav-link" data-scroll-target="#step-3-clone-to-rstudio"><span class="header-section-number">4.1.3</span> Step 3: Clone to RStudio</a></li>
+  </ul></li>
+  <li><a href="#for-enterprise-github-users-github.umn.edu" id="toc-for-enterprise-github-users-github.umn.edu" class="nav-link" data-scroll-target="#for-enterprise-github-users-github.umn.edu"><span class="header-section-number">4.2</span> For Enterprise GitHub Users (github.umn.edu):</a>
+  <ul class="collapse">
+  <li><a href="#step-1-create-repository-1" id="toc-step-1-create-repository-1" class="nav-link" data-scroll-target="#step-1-create-repository-1"><span class="header-section-number">4.2.1</span> Step 1: Create Repository</a></li>
+  <li><a href="#step-2-add-collaborator-1" id="toc-step-2-add-collaborator-1" class="nav-link" data-scroll-target="#step-2-add-collaborator-1"><span class="header-section-number">4.2.2</span> Step 2: Add Collaborator</a></li>
+  <li><a href="#step-3-clone-to-rstudio-1" id="toc-step-3-clone-to-rstudio-1" class="nav-link" data-scroll-target="#step-3-clone-to-rstudio-1"><span class="header-section-number">4.2.3</span> Step 3: Clone to RStudio</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#backup-document-in-github-you-do" id="toc-backup-document-in-github-you-do" class="nav-link" data-scroll-target="#backup-document-in-github-you-do"><span class="header-section-number">5</span> Backup Document in GitHub (<code>You Do</code>)</a>
+  <ul class="collapse">
+  <li><a href="#step-1-create-first-quarto-document" id="toc-step-1-create-first-quarto-document" class="nav-link" data-scroll-target="#step-1-create-first-quarto-document"><span class="header-section-number">5.1</span> Step 1: Create First Quarto Document</a></li>
+  <li><a href="#step-2-git-workflow-practice-same-for-both-account-types" id="toc-step-2-git-workflow-practice-same-for-both-account-types" class="nav-link" data-scroll-target="#step-2-git-workflow-practice-same-for-both-account-types"><span class="header-section-number">5.2</span> Step 2: Git Workflow Practice (Same for Both Account Types)</a></li>
+  <li><a href="#account-specific-troubleshooting-during-exercise" id="toc-account-specific-troubleshooting-during-exercise" class="nav-link" data-scroll-target="#account-specific-troubleshooting-during-exercise"><span class="header-section-number">5.3</span> Account-Specific Troubleshooting During Exercise:</a>
+  <ul class="collapse">
+  <li><a href="#personal-github-issues" id="toc-personal-github-issues" class="nav-link" data-scroll-target="#personal-github-issues"><span class="header-section-number">5.3.1</span> Personal GitHub Issues:</a></li>
+  <li><a href="#enterprise-github-issues" id="toc-enterprise-github-issues" class="nav-link" data-scroll-target="#enterprise-github-issues"><span class="header-section-number">5.3.2</span> Enterprise GitHub Issues:</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">6</span> Wrap-up</a>
+  <ul class="collapse">
+  <li><a href="#check-success-by-account-type" id="toc-check-success-by-account-type" class="nav-link" data-scroll-target="#check-success-by-account-type"><span class="header-section-number">6.1</span> Check Success by Account Type:</a></li>
+  <li><a href="#assignment-0-part-4" id="toc-assignment-0-part-4" class="nav-link" data-scroll-target="#assignment-0-part-4"><span class="header-section-number">6.2</span> Assignment 0 Part 4:</a></li>
+  <li><a href="#reading-assignment-for-tuesday" id="toc-reading-assignment-for-tuesday" class="nav-link" data-scroll-target="#reading-assignment-for-tuesday"><span class="header-section-number">6.3</span> Reading Assignment for Tuesday:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Lecture 2: Literate Programming &amp; Version Control</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<p class="subtitle lead">APEC 8221: Programming for Econometrics</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ali Joglekar </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 4, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="opening-check-in" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Opening &amp; Check-In</h1>
+<section id="status-check" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="status-check"><span class="header-section-number">1.1</span> Status Check</h2>
+<p><strong>Quick show of hands:</strong> Who completed the Software Installation &amp; Verification exercise successfully?</p>
+<blockquote class="blockquote">
+<p>If anyone is still having issues with Parts 1, send me an email - we’ll get it sorted before Monday.</p>
+</blockquote>
+</section>
+<section id="todays-mission" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="todays-mission"><span class="header-section-number">1.2</span> Today’s Mission</h2>
+<p>Today we’re adding the final two pieces to your reproducible workflow: <strong>Quarto</strong> for combining code and narrative, and <strong>Git</strong> for version control and collaboration.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can use either <strong>Personal GitHub</strong> (github.com) or <strong>UMN Enterprise GitHub</strong> (github.umn.edu) for this course. Both work perfectly fine - it’s your preference.</p>
+</div>
+</div>
+<p><strong>Git authentication is tricky</strong> regardless of which account type you choose. Almost everyone has issues the first time. That’s why we’re doing this together in class rather than making you struggle alone at home.</p>
+<p>By the end of today, you’ll have your first reproducible document pushed to GitHub.</p>
+</section>
+</section>
+<section id="quarto-basics-git-demo-i-do" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Quarto Basics &amp; Git Demo (<code>I Do</code>)</h1>
+<section id="quarto-philosophy-demo" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="quarto-philosophy-demo"><span class="header-section-number">2.1</span> Quarto Philosophy &amp; Demo</h2>
+<section id="quarto-motivation" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="quarto-motivation"><span class="header-section-number">2.1.1</span> Quarto Motivation</h3>
+<ul>
+<li>Traditional research workflow: Write code in R, copy results to Word, manually create figures, pray nothing changes.</li>
+<li>Quarto workflow: Code, narrative, and results live in one document that updates automatically.</li>
+</ul>
+<section id="why-this-matters" class="level4" data-number="2.1.1.1">
+<h4 data-number="2.1.1.1" class="anchored" data-anchor-id="why-this-matters"><span class="header-section-number">2.1.1.1</span> Why this matters</h4>
+<ul>
+<li>No copy-paste errors between R and PowerPoint</li>
+<li>Automatic updates when data changes</li>
+<li>Reproducible presentations for colleagues</li>
+<li>Professional workflow used in industry</li>
+</ul>
+</section>
+<section id="when-to-use-quarto" class="level4" data-number="2.1.1.2">
+<h4 data-number="2.1.1.2" class="anchored" data-anchor-id="when-to-use-quarto"><span class="header-section-number">2.1.1.2</span> When to use Quarto</h4>
+<p><strong>Dissertation &amp; Thesis Work</strong></p>
+<ul>
+<li>Reproducible chapters with embedded analysis, tables, and figures that update automatically when data changes</li>
+<li>Appendices with code showing exactly how results were generated for committee review</li>
+<li>Methodology sections that combine narrative explanation with actual code implementation</li>
+</ul>
+<p><strong>Journal Article Submission</strong></p>
+<ul>
+<li>Supplementary materials that journals increasingly require showing reproducible analysis</li>
+<li>Replication files that many journals now mandate for publication</li>
+<li>Pre-prints and working papers shared on platforms like arXiv, SSRN, or RePEc</li>
+</ul>
+<p><strong>Conference Presentations</strong></p>
+<ul>
+<li>Research presentations that seamlessly integrate live code demonstrations with slides</li>
+<li>Poster sessions where QR codes link to interactive, reproducible analyses</li>
+<li>Workshop materials for teaching methods to other researchers</li>
+</ul>
+</section>
+<section id="specific-professional-scenarios" class="level4" data-number="2.1.1.3">
+<h4 data-number="2.1.1.3" class="anchored" data-anchor-id="specific-professional-scenarios"><span class="header-section-number">2.1.1.3</span> Specific professional scenarios</h4>
+<p><strong>The “Oh No, the Data Updated” Scenario</strong></p>
+<p>You’re at the Minneapolis Fed. Your quarterly economic outlook report is due to the president tomorrow, but the BLS just released revised employment data.</p>
+<p>With Quarto: change one data file, re-render, done. Without Quarto: manually update 47 charts and tables, hope you don’t miss any.</p>
+<p><strong>The “Explain Your Methodology” Scenario</strong></p>
+<p>You’re testifying before Congress about your economic impact analysis. A representative asks “How exactly did you calculate that $2.3 billion figure?”</p>
+<p>With Quarto: “Here’s the exact code, data, and methodology - all publicly available.” This builds credibility and trust.</p>
+<p><strong>The “Replication Crisis” Scenario</strong></p>
+<p>You’re submitting to the American Economic Review. The editor asks for replication files.</p>
+<p>With Quarto skills: send a single document that regenerates every table and figure from raw data. Without: scramble to find old code, hope it still works, spend weeks reconstructing your analysis.</p>
+<p><strong>The “Team Collaboration” Scenario</strong></p>
+<p>You’re at a consulting firm with 5 economists working on different sections of a client report.</p>
+<p>With Quarto: everyone works on their section, integrates seamlessly, consistent formatting. Without: nightmare of merging Word documents and rebuilding broken figures.</p>
+</section>
+</section>
+<section id="create-basic-quarto-document-demo" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="create-basic-quarto-document-demo"><span class="header-section-number">2.1.2</span> Create Basic Quarto Document Demo</h3>
+<p>Quarto document consists of two parts:</p>
+<p><strong>YAML</strong></p>
+<pre><code>---
+title: "Lecture 2 Demo: Reproducible Research"
+author: "Ali Joglekar"
+date: today
+format: pdf
+---</code></pre>
+<p><strong>Markdown</strong></p>
+<pre><code># Why Quarto Matters
+
+This document combines **narrative text** with executable code.
+
+## A Simple Analysis
+
+::: {.cell}
+
+```{.r .cell-code}
+library(tidyverse)
+data(mtcars)
+
+# Calculate summary statistics
+mpg_summary &lt;- mtcars %&gt;%
+  summarise(
+    mean_mpg = mean(mpg),
+    median_mpg = median(mpg),
+    n_cars = n()
+  )
+
+print(mpg_summary)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+  mean_mpg median_mpg n_cars
+1 20.09062       19.2     32
+```
+
+
+:::
+
+```{.r .cell-code}
+# Store values for inline use
+mean_mpg_value &lt;- mpg_summary$mean_mpg
+```
+:::
+
+The average fuel economy is 20.1 miles per gallon. 
+
+This value was calculated directly from the data and will update automatically if the data changes!
+
+
+## A Simple Plot
+
+::: {.cell}
+
+```{.r .cell-code}
+ggplot(mtcars, aes(x = mpg, y = hp)) +
+  geom_point(aes(color = factor(cyl))) +
+  labs(
+    title = "Horsepower vs. Fuel Economy",
+    x = "Miles per Gallon",
+    y = "Horsepower",
+    color = "Cylinders"
+  ) +
+  theme_minimal()
+```
+
+::: {.cell-output-display}
+![](lecture2_git-quarto_files/figure-html/unnamed-chunk-2-1.png){width=672}
+:::
+:::
+
+This plot shows the relationship between fuel economy and engine power.</code></pre>
+</section>
+<section id="render-the-document" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="render-the-document"><span class="header-section-number">2.1.3</span> Render the Document</h3>
+<p>Watch what happens when I render this… (Click Render)</p>
+<p>See how the code runs, results appear, and everything is formatted professionally?</p>
+</section>
+<section id="what-about-slides" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="what-about-slides"><span class="header-section-number">2.1.4</span> What about Slides?</h3>
+<ol type="1">
+<li><strong>Change format</strong> from <code>pdf</code> to <code>revealjs</code></li>
+<li><strong>Add slide breaks</strong> using <code>---</code></li>
+<li><strong>Enhance code chunks</strong> with:
+<ul>
+<li><code>#| echo: true</code> to show code</li>
+<li><code>#| code-line-numbers: "1-3|4-10|12"</code> for progressive highlighting</li>
+<li><code>#| fig-width: 8</code> and <code>#| fig-height: 5</code> for better plot sizing</li>
+</ul></li>
+<li><strong>Split content</strong> into logical slide chunks</li>
+</ol>
+<pre><code>---
+title: "Lecture 2 Demo: Reproducible Research"
+author: "Ali Joglekar"
+date: today
+format:
+  revealjs:
+    theme: dark
+    slide-number: true
+    chalkboard: true
+    code-fold: false
+    code-overflow: wrap
+---
+
+# Why Quarto Matters
+
+This document combines **narrative text** with executable code.
+
+---
+
+## A Simple Analysis
+
+::: {.cell}
+
+```{.r .cell-code  code-line-numbers="1-3|4-10|12"}
+library(tidyverse)
+data(mtcars)
+
+# Calculate summary statistics
+mpg_summary &lt;- mtcars %&gt;%
+  summarise(
+    mean_mpg = mean(mpg),
+    median_mpg = median(mpg),
+    n_cars = n()
+  )
+
+print(mpg_summary)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+  mean_mpg median_mpg n_cars
+1 20.09062       19.2     32
+```
+
+
+:::
+:::
+
+::: {.cell}
+
+:::
+
+---
+
+## Key Finding
+
+The average fuel economy is 20.1 miles per gallon. 
+
+This value was calculated directly from the data and will update automatically if the data changes!
+
+---
+
+## A Simple Plot
+
+::: {.cell}
+::: {.cell-output-display}
+![](lecture2_git-quarto_files/figure-html/unnamed-chunk-5-1.png){width=768}
+:::
+:::
+
+---
+
+## Key Insight
+
+This plot shows the relationship between fuel economy and engine power.</code></pre>
+</section>
+</section>
+<section id="versioning-with-git-demo" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="versioning-with-git-demo"><span class="header-section-number">2.2</span> Versioning with Git Demo</h2>
+<p>Quarto solves the ‘code + narrative’ problem. Git solves the ‘collaboration + history’ problem.</p>
+<ul>
+<li>Git is like a sophisticated “Save As” system</li>
+<li>Repository = Project folder with full history</li>
+<li>Commit = Saved snapshot with description</li>
+<li>Push = Upload your changes to GitHub</li>
+<li>Pull = Download others’ changes from GitHub</li>
+</ul>
+<section id="creating-a-git-repository" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="creating-a-git-repository"><span class="header-section-number">2.2.1</span> Creating a Git Repository</h3>
+<section id="personal-github-demo" class="level4" data-number="2.2.1.1">
+<h4 data-number="2.2.1.1" class="anchored" data-anchor-id="personal-github-demo"><span class="header-section-number">2.2.1.1</span> Personal GitHub Demo:</h4>
+<p>Let me show you the basic Git workflow using Personal GitHub first - this is what most students will use.</p>
+<p><strong>Create new GitHub repository on github.com:</strong></p>
+<ul>
+<li>Go to github.com → New Repository</li>
+<li>Name: “lecture2-demo-personal”</li>
+<li>Private repository</li>
+<li>Initialize with README: Yes</li>
+<li>Add .gitignore: R</li>
+</ul>
+<p><strong>Clone to RStudio:</strong></p>
+<ul>
+<li><p>In RStudio: File → New Project → Version Control → Git</p></li>
+<li><p>Repository URL: <a href="https://github.com/%5Busername%5D/lecture2-demo-personal.git">https://github.com/[username]/lecture2-demo-personal.git</a></p></li>
+<li><p>Choose location and create project</p></li>
+</ul>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>AVOID these locations:</strong></p>
+<ul>
+<li><p>Google Drive, OneDrive, Dropbox folders</p></li>
+<li><p>Network drives (H:/ drives, etc.)</p></li>
+<li><p>External USB drives</p></li>
+<li><p>Any folder that syncs to the cloud</p></li>
+</ul>
+<p><strong>RECOMMENDED locations:</strong></p>
+<ul>
+<li><p>C:/Users/[your-username]/Documents/apec8221-[your-x500-id]/</p></li>
+<li><p>Your local Documents folder</p></li>
+<li><p>Desktop (if you don’t mind it there)</p></li>
+</ul>
+<p><strong>Why this matters:</strong> Cloud sync services interfere with Git’s internal files, causing corruption and mysterious errors. Since you’re already using GitHub for cloud backup and collaboration, additional cloud sync is unnecessary and problematic.</p>
+</div>
+</div>
+<p><strong>Configure R for GitHub:</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal GitHub is the default - no special setup needed!</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check current configuration</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git_sitrep</span>()  </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Should show "Default GitHub host: https://github.com"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create token for github.com</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"Demo-Personal-Access"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Verify it Worked:</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test your setup</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">'https://github.umn.edu/api/v3'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Should return your user information if working correctly.</p>
+</section>
+<section id="enterprise-github-demo" class="level4" data-number="2.2.1.2">
+<h4 data-number="2.2.1.2" class="anchored" data-anchor-id="enterprise-github-demo"><span class="header-section-number">2.2.1.2</span> Enterprise GitHub Demo:</h4>
+<p>Now let me show the Enterprise GitHub setup for those who prefer institutional accounts.</p>
+<p><strong>Create new GitHub repository on github.umn.edu:</strong></p>
+<ul>
+<li>Go to github.umn.edu → New Repository</li>
+<li>Name: “lecture2-demo-enterprise”</li>
+<li>Private repository</li>
+<li>Initialize with README: Yes</li>
+<li>Add .gitignore: R</li>
+</ul>
+<p><strong>Clone to RStudio:</strong></p>
+<ul>
+<li><p>In RStudio: File → New Project → Version Control → Git</p></li>
+<li><p>Repository URL: <a href="https://github.umn.edu/%5Busername%5D/lecture2-demo-enterprise.git">https://github.umn.edu/[username]/lecture2-demo-enterprise.git</a></p></li>
+<li><p>Choose location and create project</p></li>
+</ul>
+<p><strong>Configure R for Enterprise GitHub:</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enterprise requires special configuration</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure .Rprofile for enterprise</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show adding these lines:</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># options(</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.protocol = "https",</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.host = "https://github.umn.edu",</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.github_host = "https://github.umn.edu"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart R to load changes</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create enterprise token</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">"https://github.umn.edu"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"Demo-Enterprise-Access"</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Store enterprise token</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>(<span class="at">url =</span> <span class="st">"https://github.umn.edu"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Verify it Worked:</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test your setup</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">'https://github.umn.edu/api/v3'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Should return your user information if working correctly.</p>
+</section>
+</section>
+<section id="git-cycle" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="git-cycle"><span class="header-section-number">2.2.2</span> Git Cycle</h3>
+<p>This is the basic cycle: <strong>Edit → Stage → Commit → Push</strong>. The process is identical regardless of which GitHub account type you choose.</p>
+<ol type="1">
+<li>Add file(s)</li>
+<li>Stage the file (check the box in the <code>Git</code> tab – found in Environment pane)</li>
+<li>Click <strong>Commit</strong> (review changes opens in a new window).</li>
+<li>Write commit message: “Add first reproducible analysis”</li>
+<li>Click <strong>Commit</strong></li>
+<li>Click <strong>Push</strong></li>
+<li>Revise file(s)</li>
+<li><strong>Stage → Commit → Push</strong></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="collaborative-git-setup-by-account-type-we-do" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Collaborative Git Setup by Account Type (<code>We Do</code>)</h1>
+<p>Quick show of hands:</p>
+<ul>
+<li>Who is using <strong>Personal GitHub</strong> (github.com)? This is recommended for most students.</li>
+<li>Who is using <strong>UMN Enterprise GitHub</strong> (github.umn.edu)?</li>
+</ul>
+<p>Great! Now let’s work through setup for each group.</p>
+<section id="personal-github-group" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="personal-github-group"><span class="header-section-number">3.1</span> Personal GitHub Group:</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal GitHub users - this should be straightforward</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Check configuration (should already be correct)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git_sitrep</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Should show: Default GitHub host: "https://github.com"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create token (opens github.com)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"APEC8221-Personal-Access"</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Store token</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Test connection</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="enterprise-github-group" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="enterprise-github-group"><span class="header-section-number">3.2</span> Enterprise GitHub Group:</h2>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enterprise GitHub users - need special configuration</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Configure .Rprofile</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add these lines to .Rprofile:</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># options(</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.protocol = "https",</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.host = "https://github.umn.edu", </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.github_host = "https://github.umn.edu"</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Restart R (Session → Restart R)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Create enterprise token</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">"https://github.umn.edu"</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"APEC8221-Enterprise-Access"</span>  </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Store enterprise token</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>(<span class="at">url =</span> <span class="st">"https://github.umn.edu"</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Test enterprise connection</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">"https://github.umn.edu/api/v3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="create-course-repository-by-account-type-you-do" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Create Course Repository by Account Type (<code>You Do</code>)</h1>
+<p>Now you’re going to create your course repository using your existing GitHub account.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember: <strong>authentication issues are normal for both account types</strong> - I’m here to help.</p>
+</div>
+</div>
+<section id="for-personal-github-users-github.com" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="for-personal-github-users-github.com"><span class="header-section-number">4.1</span> For Personal GitHub Users (github.com):</h2>
+<section id="step-1-create-repository" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="step-1-create-repository"><span class="header-section-number">4.1.1</span> Step 1: Create Repository</h3>
+<ul>
+<li>Go to <strong>github.com</strong></li>
+<li>Click “New Repository”</li>
+<li>Name: <code>apec8221-[your-umn-id]</code> (e.g., <code>apec8221-smith123</code>)</li>
+<li>Description: “APEC 8221 Programming for Econometrics coursework”</li>
+<li><strong>IMPORTANT: Make it PRIVATE</strong></li>
+<li>Initialize with README: Yes</li>
+<li>Add .gitignore: R</li>
+</ul>
+</section>
+<section id="step-2-add-collaborator" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="step-2-add-collaborator"><span class="header-section-number">4.1.2</span> Step 2: Add Collaborator</h3>
+<ul>
+<li>Settings → Manage access → Invite collaborator</li>
+<li>Username: <code>joglekar</code></li>
+<li>Send invitation</li>
+</ul>
+</section>
+<section id="step-3-clone-to-rstudio" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="step-3-clone-to-rstudio"><span class="header-section-number">4.1.3</span> Step 3: Clone to RStudio</h3>
+<ul>
+<li>Copy repository URL: <code>https://github.com/[your-username]/apec8221-[umn-id].git</code></li>
+<li>In RStudio: File → New Project → Version Control → Git</li>
+<li>Paste URL, choose location, create project</li>
+</ul>
+</section>
+</section>
+<section id="for-enterprise-github-users-github.umn.edu" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="for-enterprise-github-users-github.umn.edu"><span class="header-section-number">4.2</span> For Enterprise GitHub Users (github.umn.edu):</h2>
+<section id="step-1-create-repository-1" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="step-1-create-repository-1"><span class="header-section-number">4.2.1</span> Step 1: Create Repository</h3>
+<ul>
+<li>Go to <strong>github.umn.edu</strong></li>
+<li>Name: <code>apec8221-[your-umn-id]</code> (e.g., <code>apec8221-smith123</code>)</li>
+<li>Description: “APEC 8221 Programming for Econometrics coursework”</li>
+<li><strong>IMPORTANT: Make it PRIVATE</strong></li>
+<li>Initialize with README: Yes</li>
+<li>Add .gitignore: R</li>
+</ul>
+</section>
+<section id="step-2-add-collaborator-1" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="step-2-add-collaborator-1"><span class="header-section-number">4.2.2</span> Step 2: Add Collaborator</h3>
+<ul>
+<li>Username: <code>joglekar</code> (same for both account types)</li>
+</ul>
+</section>
+<section id="step-3-clone-to-rstudio-1" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="step-3-clone-to-rstudio-1"><span class="header-section-number">4.2.3</span> Step 3: Clone to RStudio</h3>
+<ul>
+<li>Copy repository URL: <code>https://github.umn.edu/[your-username]/apec8221-[umn-id].git</code></li>
+<li>In RStudio: File → New Project → Version Control → Git</li>
+<li>Paste URL, choose location, create project</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="backup-document-in-github-you-do" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Backup Document in GitHub (<code>You Do</code>)</h1>
+<section id="step-1-create-first-quarto-document" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="step-1-create-first-quarto-document"><span class="header-section-number">5.1</span> Step 1: Create First Quarto Document</h2>
+<ul>
+<li>In RStudio: File → New File → Quarto</li>
+<li>Document Title: “APEC 8221 - My Research Workflow”</li>
+<li>Save as: hello_quarto.qmd</li>
+</ul>
+<p><strong>Use this content:</strong></p>
+<pre><code>---
+title: "APEC 8221 - My Research Workflow"
+author: "[Your Name]"
+date: today
+format: pdf
+---
+
+# Introduction
+
+This is my first reproducible document for APEC 8221 using [Personal/Enterprise] GitHub.
+
+## Basic R Skills
+
+::: {.cell}
+
+```{.r .cell-code}
+# Demonstrate basic R commands
+library(tidyverse)
+
+# Create some data
+my_data &lt;- data.frame(
+  x = 1:10,
+  y = (1:10)^2 + rnorm(10, 0, 5)
+)
+
+# Summary statistics
+summary(my_data)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+       x               y         
+ Min.   : 1.00   Min.   :-3.916  
+ 1st Qu.: 3.25   1st Qu.:17.318  
+ Median : 5.50   Median :25.563  
+ Mean   : 5.50   Mean   :37.396  
+ 3rd Qu.: 7.75   3rd Qu.:60.478  
+ Max.   :10.00   Max.   :93.055  
+```
+
+
+:::
+
+```{.r .cell-code}
+# Store values for inline use
+mean_x &lt;- mean(my_data$x)
+```
+:::
+
+The average of variable `x` is 5.5. 
+
+## My First Plot
+
+::: {.cell}
+
+```{.r .cell-code}
+ggplot(my_data, aes(x = x, y = y)) +
+  geom_point(size = 3, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "My First Reproducible Plot",
+    x = "X Variable",
+    y = "Y Variable"
+  ) +
+  theme_minimal()
+```
+
+::: {.cell-output-display}
+![](lecture2_git-quarto_files/figure-html/unnamed-chunk-13-1.png){width=672}
+:::
+:::</code></pre>
+</section>
+<section id="step-2-git-workflow-practice-same-for-both-account-types" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="step-2-git-workflow-practice-same-for-both-account-types"><span class="header-section-number">5.2</span> Step 2: Git Workflow Practice (Same for Both Account Types)</h2>
+<ol type="1">
+<li>Render the document (make sure it works!)</li>
+<li>Look at Git tab - see the new files?</li>
+<li>Stage the files (check boxes for <code>.qmd</code> and <code>.pdf/.html</code>)</li>
+<li>Commit with message: “Add first reproducible analysis with [Personal/Enterprise] GitHub”</li>
+<li>Push to GitHub (authentication happens here!)</li>
+</ol>
+</section>
+<section id="account-specific-troubleshooting-during-exercise" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="account-specific-troubleshooting-during-exercise"><span class="header-section-number">5.3</span> Account-Specific Troubleshooting During Exercise:</h2>
+<section id="personal-github-issues" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="personal-github-issues"><span class="header-section-number">5.3.1</span> Personal GitHub Issues:</h3>
+<ul>
+<li><strong>Token problems:</strong> Make sure <code>create_github_token()</code> opened <a href="https:/github.com">github.com</a> (not <a href="https://github.umn.edu">github.umn.edu</a>)</li>
+<li><strong>Repository URL:</strong> Should start with <code>https://github.com/</code> (not github.umn.edu)</li>
+<li><strong>Test command:</strong> <code>gh::gh_whoami()</code> (no additional parameters needed)</li>
+</ul>
+</section>
+<section id="enterprise-github-issues" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="enterprise-github-issues"><span class="header-section-number">5.3.2</span> Enterprise GitHub Issues:</h3>
+<ul>
+<li><strong>Wrong host:</strong> Check that <code>git_sitrep()</code> shows github.umn.edu as default host</li>
+<li><strong>Token problems:</strong> Make sure <code>create_github_token(host = "https://github.umn.edu")</code> opened the enterprise site</li>
+<li><strong>Repository URL:</strong> Should start with <code>https://github.umn.edu/</code></li>
+<li><strong>Test command:</strong> <code>gh::gh_whoami(.api_url = "https://github.umn.edu/api/v3")</code></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="wrap-up" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Wrap-up</h1>
+<section id="check-success-by-account-type" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="check-success-by-account-type"><span class="header-section-number">6.1</span> Check Success by Account Type:</h2>
+<p>Quick show of hands:</p>
+<ul>
+<li>Personal GitHub users who successfully pushed to github.com?</li>
+<li>Enterprise GitHub users who successfully pushed to github.umn.edu?</li>
+</ul>
+<p>If you didn’t get there today with either account type, <strong>don’t panic</strong>. Post your issue on the Canvas discussion board or email me your exact error message <strong>and which account type you’re using</strong>. We’ll get it working.</p>
+</section>
+<section id="assignment-0-part-4" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="assignment-0-part-4"><span class="header-section-number">6.2</span> Assignment 0 Part 4:</h2>
+<p>Now you can complete the rest of Assignment 0.</p>
+</section>
+<section id="reading-assignment-for-tuesday" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="reading-assignment-for-tuesday"><span class="header-section-number">6.3</span> Reading Assignment for Tuesday:</h2>
+<p>Tuesday we dive into data manipulation with <code>dplyr</code> - the heart of <code>tidyverse</code>.</p>
+<p>For Tuesday’s class on data manipulation, please read:</p>
+<ul>
+<li><p><strong>R4DS Chapter 3 (Data Transformation)</strong> - the core <code>dplyr</code> verbs we’ll use constantly</p></li>
+<li><p><strong>R4DS Chapter 7 (Data Import)</strong> - reading files with <code>readr</code></p></li>
+<li><p><strong>R4DS Chapter 27.2-27.3 (A Field Guide to Base R)</strong> - selecting elements from vectors and data frames</p></li>
+</ul>
+<p>Chapter 3 is the most important - focus there if you’re short on time. We’ll be using <code>filter()</code>, <code>select()</code>, <code>mutate()</code>, <code>group_by()</code>, and <code>summarise()</code> extensively.</p>
+<!-- -->
+
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lecture 2: Literate Programming &amp; Version Control"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "APEC 8221: Programming for Econometrics"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Ali Joglekar"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "September 4, 2025"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: true</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: true</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="an">editor:</span><span class="co"> visual</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opening &amp; Check-In</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Status Check</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>**Quick show of hands:** Who completed the Software Installation &amp; Verification exercise successfully?</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; If anyone is still having issues with Parts 1, send me an email - we'll get it sorted before Monday.</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today's Mission</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>Today we're adding the final two pieces to your reproducible workflow: **Quarto** for combining code and narrative, and **Git** for version control and collaboration.</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>You can use either **Personal GitHub** (github.com) or **UMN Enterprise GitHub** (github.umn.edu) for this course.</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>Both work perfectly fine - it's your preference.</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>**Git authentication is tricky** regardless of which account type you choose.</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>Almost everyone has issues the first time.</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>That's why we're doing this together in class rather than making you struggle alone at home.</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>By the end of today, you'll have your first reproducible document pushed to GitHub.</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="fu"># Quarto Basics &amp; Git Demo (`I Do`)</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quarto Philosophy &amp; Demo</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="fu">### Quarto Motivation</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Traditional research workflow: Write code in R, copy results to Word, manually create figures, pray nothing changes.</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Quarto workflow: Code, narrative, and results live in one document that updates automatically.</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Why this matters</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>No copy-paste errors between R and PowerPoint</span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Automatic updates when data changes</span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Reproducible presentations for colleagues</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Professional workflow used in industry</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="fu">#### When to use Quarto</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>**Dissertation &amp; Thesis Work**</span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Reproducible chapters with embedded analysis, tables, and figures that update automatically when data changes</span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Appendices with code showing exactly how results were generated for committee review</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Methodology sections that combine narrative explanation with actual code implementation</span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>**Journal Article Submission**</span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Supplementary materials that journals increasingly require showing reproducible analysis</span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Replication files that many journals now mandate for publication</span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Pre-prints and working papers shared on platforms like arXiv, SSRN, or RePEc</span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>**Conference Presentations**</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Research presentations that seamlessly integrate live code demonstrations with slides</span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Poster sessions where QR codes link to interactive, reproducible analyses</span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Workshop materials for teaching methods to other researchers</span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Specific professional scenarios</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>**The "Oh No, the Data Updated" Scenario**</span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>You're at the Minneapolis Fed.</span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>Your quarterly economic outlook report is due to the president tomorrow, but the BLS just released revised employment data.</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>With Quarto: change one data file, re-render, done.</span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>Without Quarto: manually update 47 charts and tables, hope you don't miss any.</span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>**The "Explain Your Methodology" Scenario**</span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>You're testifying before Congress about your economic impact analysis.</span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>A representative asks "How exactly did you calculate that \$2.3 billion figure?"</span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>With Quarto: "Here's the exact code, data, and methodology - all publicly available." This builds credibility and trust.</span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>**The "Replication Crisis" Scenario**</span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>You're submitting to the American Economic Review.</span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>The editor asks for replication files.</span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>With Quarto skills: send a single document that regenerates every table and figure from raw data.</span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>Without: scramble to find old code, hope it still works, spend weeks reconstructing your analysis.</span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>**The "Team Collaboration" Scenario**</span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>You're at a consulting firm with 5 economists working on different sections of a client report.</span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a>With Quarto: everyone works on their section, integrates seamlessly, consistent formatting.</span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>Without: nightmare of merging Word documents and rebuilding broken figures.</span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Create Basic Quarto Document Demo</span></span>
+<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a>Quarto document consists of two parts:</span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a>**YAML**</span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a><span class="in">```         </span></span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a><span class="in">title: "Lecture 2 Demo: Reproducible Research"</span></span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a><span class="in">author: "Ali Joglekar"</span></span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a><span class="in">date: today</span></span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a><span class="in">format: pdf</span></span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>**Markdown**</span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a><span class="in">````         </span></span>
+<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a><span class="in"># Why Quarto Matters</span></span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a><span class="in">This document combines **narrative text** with executable code.</span></span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a><span class="in">## A Simple Analysis</span></span>
+<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a><span class="in">data(mtcars)</span></span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a><span class="in"># Calculate summary statistics</span></span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a><span class="in">mpg_summary &lt;- mtcars %&gt;%</span></span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a><span class="in">    mean_mpg = mean(mpg),</span></span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a><span class="in">    median_mpg = median(mpg),</span></span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a><span class="in">    n_cars = n()</span></span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a><span class="in">print(mpg_summary)</span></span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a><span class="in"># Store values for inline use</span></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a><span class="in">mean_mpg_value &lt;- mpg_summary$mean_mpg</span></span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a><span class="in">The average fuel economy is `{r} round(mean_mpg_value, 1)` miles per gallon. </span></span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a><span class="in">This value was calculated directly from the data and will update automatically if the data changes!</span></span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="in">## A Simple Plot</span></span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(mtcars, aes(x = mpg, y = hp)) +</span></span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(color = factor(cyl))) +</span></span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(</span></span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a><span class="in">    title = "Horsepower vs. Fuel Economy",</span></span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a><span class="in">    x = "Miles per Gallon",</span></span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="in">    y = "Horsepower",</span></span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a><span class="in">    color = "Cylinders"</span></span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a><span class="in">  ) +</span></span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_minimal()</span></span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a><span class="in">This plot shows the relationship between fuel economy and engine power.</span></span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a><span class="in">````</span></span>
+<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Render the Document</span></span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a>Watch what happens when I render this...</span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a>(Click Render)</span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a>See how the code runs, results appear, and everything is formatted professionally?</span>
+<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a><span class="fu">### What about Slides?</span></span>
+<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Change format** from <span class="in">`pdf`</span> to <span class="in">`revealjs`</span></span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Add slide breaks** using <span class="in">`---`</span></span>
+<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Enhance code chunks** with:</span>
+<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span><span class="in">`#| echo: true`</span> to show code</span>
+<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span><span class="in">`#| code-line-numbers: "1-3|4-10|12"`</span> for progressive highlighting</span>
+<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span><span class="in">`#| fig-width: 8`</span> and <span class="in">`#| fig-height: 5`</span> for better plot sizing</span>
+<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Split content** into logical slide chunks</span>
+<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a><span class="in">````         </span></span>
+<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a><span class="in">title: "Lecture 2 Demo: Reproducible Research"</span></span>
+<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a><span class="in">author: "Ali Joglekar"</span></span>
+<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a><span class="in">date: today</span></span>
+<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a><span class="in">format:</span></span>
+<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a><span class="in">  revealjs:</span></span>
+<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a><span class="in">    theme: dark</span></span>
+<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a><span class="in">    slide-number: true</span></span>
+<span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a><span class="in">    chalkboard: true</span></span>
+<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a><span class="in">    code-fold: false</span></span>
+<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a><span class="in">    code-overflow: wrap</span></span>
+<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a><span class="in"># Why Quarto Matters</span></span>
+<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a><span class="in">This document combines **narrative text** with executable code.</span></span>
+<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a><span class="in">## A Simple Analysis</span></span>
+<span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a><span class="in">#| echo: true</span></span>
+<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a><span class="in">#| code-line-numbers: "1-3|4-10|12"</span></span>
+<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a><span class="in">data(mtcars)</span></span>
+<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a><span class="in"># Calculate summary statistics</span></span>
+<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a><span class="in">mpg_summary &lt;- mtcars %&gt;%</span></span>
+<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
+<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a><span class="in">    mean_mpg = mean(mpg),</span></span>
+<span id="cb11-232"><a href="#cb11-232" aria-hidden="true" tabindex="-1"></a><span class="in">    median_mpg = median(mpg),</span></span>
+<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a><span class="in">    n_cars = n()</span></span>
+<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
+<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a><span class="in">print(mpg_summary)</span></span>
+<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-238"><a href="#cb11-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a><span class="in">#| echo: false</span></span>
+<span id="cb11-243"><a href="#cb11-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-244"><a href="#cb11-244" aria-hidden="true" tabindex="-1"></a><span class="in"># Store values for inline use</span></span>
+<span id="cb11-245"><a href="#cb11-245" aria-hidden="true" tabindex="-1"></a><span class="in">mean_mpg_value &lt;- mpg_summary$mean_mpg</span></span>
+<span id="cb11-246"><a href="#cb11-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-247"><a href="#cb11-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-248"><a href="#cb11-248" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-249"><a href="#cb11-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-250"><a href="#cb11-250" aria-hidden="true" tabindex="-1"></a><span class="in">## Key Finding</span></span>
+<span id="cb11-251"><a href="#cb11-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-252"><a href="#cb11-252" aria-hidden="true" tabindex="-1"></a><span class="in">The average fuel economy is `{r} round(mean_mpg_value, 1)` miles per gallon. </span></span>
+<span id="cb11-253"><a href="#cb11-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-254"><a href="#cb11-254" aria-hidden="true" tabindex="-1"></a><span class="in">This value was calculated directly from the data and will update automatically if the data changes!</span></span>
+<span id="cb11-255"><a href="#cb11-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-256"><a href="#cb11-256" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-257"><a href="#cb11-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-258"><a href="#cb11-258" aria-hidden="true" tabindex="-1"></a><span class="in">## A Simple Plot</span></span>
+<span id="cb11-259"><a href="#cb11-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-262"><a href="#cb11-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-263"><a href="#cb11-263" aria-hidden="true" tabindex="-1"></a><span class="in">#| echo: false</span></span>
+<span id="cb11-264"><a href="#cb11-264" aria-hidden="true" tabindex="-1"></a><span class="in">#| fig-width: 8</span></span>
+<span id="cb11-265"><a href="#cb11-265" aria-hidden="true" tabindex="-1"></a><span class="in">#| fig-height: 5</span></span>
+<span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-267"><a href="#cb11-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-268"><a href="#cb11-268" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(mtcars, aes(x = mpg, y = hp)) +</span></span>
+<span id="cb11-269"><a href="#cb11-269" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(color = factor(cyl)), size = 3) +</span></span>
+<span id="cb11-270"><a href="#cb11-270" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(</span></span>
+<span id="cb11-271"><a href="#cb11-271" aria-hidden="true" tabindex="-1"></a><span class="in">    title = "Horsepower vs. Fuel Economy",</span></span>
+<span id="cb11-272"><a href="#cb11-272" aria-hidden="true" tabindex="-1"></a><span class="in">    x = "Miles per Gallon",</span></span>
+<span id="cb11-273"><a href="#cb11-273" aria-hidden="true" tabindex="-1"></a><span class="in">    y = "Horsepower",</span></span>
+<span id="cb11-274"><a href="#cb11-274" aria-hidden="true" tabindex="-1"></a><span class="in">    color = "Cylinders"</span></span>
+<span id="cb11-275"><a href="#cb11-275" aria-hidden="true" tabindex="-1"></a><span class="in">  ) +</span></span>
+<span id="cb11-276"><a href="#cb11-276" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_minimal()</span></span>
+<span id="cb11-277"><a href="#cb11-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-278"><a href="#cb11-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-279"><a href="#cb11-279" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-280"><a href="#cb11-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-281"><a href="#cb11-281" aria-hidden="true" tabindex="-1"></a><span class="in">## Key Insight</span></span>
+<span id="cb11-282"><a href="#cb11-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-283"><a href="#cb11-283" aria-hidden="true" tabindex="-1"></a><span class="in">This plot shows the relationship between fuel economy and engine power.</span></span>
+<span id="cb11-284"><a href="#cb11-284" aria-hidden="true" tabindex="-1"></a><span class="in">````</span></span>
+<span id="cb11-285"><a href="#cb11-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-286"><a href="#cb11-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Versioning with Git Demo</span></span>
+<span id="cb11-287"><a href="#cb11-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-288"><a href="#cb11-288" aria-hidden="true" tabindex="-1"></a>Quarto solves the 'code + narrative' problem.</span>
+<span id="cb11-289"><a href="#cb11-289" aria-hidden="true" tabindex="-1"></a>Git solves the 'collaboration + history' problem.</span>
+<span id="cb11-290"><a href="#cb11-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-291"><a href="#cb11-291" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Git is like a sophisticated "Save As" system</span>
+<span id="cb11-292"><a href="#cb11-292" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Repository = Project folder with full history</span>
+<span id="cb11-293"><a href="#cb11-293" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Commit = Saved snapshot with description</span>
+<span id="cb11-294"><a href="#cb11-294" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Push = Upload your changes to GitHub</span>
+<span id="cb11-295"><a href="#cb11-295" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Pull = Download others' changes from GitHub</span>
+<span id="cb11-296"><a href="#cb11-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-297"><a href="#cb11-297" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating a Git Repository</span></span>
+<span id="cb11-298"><a href="#cb11-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-299"><a href="#cb11-299" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Personal GitHub Demo:</span></span>
+<span id="cb11-300"><a href="#cb11-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-301"><a href="#cb11-301" aria-hidden="true" tabindex="-1"></a>Let me show you the basic Git workflow using Personal GitHub first - this is what most students will use.</span>
+<span id="cb11-302"><a href="#cb11-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-303"><a href="#cb11-303" aria-hidden="true" tabindex="-1"></a>**Create new GitHub repository on github.com:**</span>
+<span id="cb11-304"><a href="#cb11-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-305"><a href="#cb11-305" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Go to github.com → New Repository</span>
+<span id="cb11-306"><a href="#cb11-306" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Name: "lecture2-demo-personal"</span>
+<span id="cb11-307"><a href="#cb11-307" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Private repository</span>
+<span id="cb11-308"><a href="#cb11-308" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Initialize with README: Yes</span>
+<span id="cb11-309"><a href="#cb11-309" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Add .gitignore: R</span>
+<span id="cb11-310"><a href="#cb11-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-311"><a href="#cb11-311" aria-hidden="true" tabindex="-1"></a>**Clone to RStudio:**</span>
+<span id="cb11-312"><a href="#cb11-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-313"><a href="#cb11-313" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In RStudio: File → New Project → Version Control → Git</span>
+<span id="cb11-314"><a href="#cb11-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-315"><a href="#cb11-315" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Repository URL: <span class="co">[</span><span class="ot">https://github.com/\[username\]/lecture2-demo-personal.git</span><span class="co">](https://github.com/[username]/lecture2-demo-personal.git)</span></span>
+<span id="cb11-316"><a href="#cb11-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-317"><a href="#cb11-317" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Choose location and create project</span>
+<span id="cb11-318"><a href="#cb11-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-319"><a href="#cb11-319" aria-hidden="true" tabindex="-1"></a>::: callout-caution</span>
+<span id="cb11-320"><a href="#cb11-320" aria-hidden="true" tabindex="-1"></a>**AVOID these locations:**</span>
+<span id="cb11-321"><a href="#cb11-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-322"><a href="#cb11-322" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Google Drive, OneDrive, Dropbox folders</span>
+<span id="cb11-323"><a href="#cb11-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-324"><a href="#cb11-324" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Network drives (H:/ drives, etc.)</span>
+<span id="cb11-325"><a href="#cb11-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-326"><a href="#cb11-326" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>External USB drives</span>
+<span id="cb11-327"><a href="#cb11-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-328"><a href="#cb11-328" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Any folder that syncs to the cloud</span>
+<span id="cb11-329"><a href="#cb11-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-330"><a href="#cb11-330" aria-hidden="true" tabindex="-1"></a>**RECOMMENDED locations:**</span>
+<span id="cb11-331"><a href="#cb11-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-332"><a href="#cb11-332" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>C:/Users/<span class="sc">\[</span>your-username<span class="sc">\]</span>/Documents/apec8221-<span class="sc">\[</span>your-x500-id<span class="sc">\]</span>/</span>
+<span id="cb11-333"><a href="#cb11-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-334"><a href="#cb11-334" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Your local Documents folder</span>
+<span id="cb11-335"><a href="#cb11-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-336"><a href="#cb11-336" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Desktop (if you don't mind it there)</span>
+<span id="cb11-337"><a href="#cb11-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-338"><a href="#cb11-338" aria-hidden="true" tabindex="-1"></a>**Why this matters:** Cloud sync services interfere with Git's internal files, causing corruption and mysterious errors.</span>
+<span id="cb11-339"><a href="#cb11-339" aria-hidden="true" tabindex="-1"></a>Since you're already using GitHub for cloud backup and collaboration, additional cloud sync is unnecessary and problematic.</span>
+<span id="cb11-340"><a href="#cb11-340" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-341"><a href="#cb11-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-342"><a href="#cb11-342" aria-hidden="true" tabindex="-1"></a>**Configure R for GitHub:**</span>
+<span id="cb11-343"><a href="#cb11-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-346"><a href="#cb11-346" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-347"><a href="#cb11-347" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-348"><a href="#cb11-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-349"><a href="#cb11-349" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal GitHub is the default - no special setup needed!</span></span>
+<span id="cb11-350"><a href="#cb11-350" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb11-351"><a href="#cb11-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-352"><a href="#cb11-352" aria-hidden="true" tabindex="-1"></a><span class="co"># Check current configuration</span></span>
+<span id="cb11-353"><a href="#cb11-353" aria-hidden="true" tabindex="-1"></a><span class="fu">git_sitrep</span>()  </span>
+<span id="cb11-354"><a href="#cb11-354" aria-hidden="true" tabindex="-1"></a><span class="co"># Should show "Default GitHub host: https://github.com"</span></span>
+<span id="cb11-355"><a href="#cb11-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-356"><a href="#cb11-356" aria-hidden="true" tabindex="-1"></a><span class="co"># Create token for github.com</span></span>
+<span id="cb11-357"><a href="#cb11-357" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb11-358"><a href="#cb11-358" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb11-359"><a href="#cb11-359" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"Demo-Personal-Access"</span></span>
+<span id="cb11-360"><a href="#cb11-360" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-361"><a href="#cb11-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-362"><a href="#cb11-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-363"><a href="#cb11-363" aria-hidden="true" tabindex="-1"></a>**Verify it Worked:**</span>
+<span id="cb11-364"><a href="#cb11-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-367"><a href="#cb11-367" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-368"><a href="#cb11-368" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-369"><a href="#cb11-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-370"><a href="#cb11-370" aria-hidden="true" tabindex="-1"></a><span class="co"># Test your setup</span></span>
+<span id="cb11-371"><a href="#cb11-371" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>()</span>
+<span id="cb11-372"><a href="#cb11-372" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">'https://github.umn.edu/api/v3'</span>)</span>
+<span id="cb11-373"><a href="#cb11-373" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-374"><a href="#cb11-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-375"><a href="#cb11-375" aria-hidden="true" tabindex="-1"></a>Should return your user information if working correctly.</span>
+<span id="cb11-376"><a href="#cb11-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-377"><a href="#cb11-377" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Enterprise GitHub Demo:</span></span>
+<span id="cb11-378"><a href="#cb11-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-379"><a href="#cb11-379" aria-hidden="true" tabindex="-1"></a>Now let me show the Enterprise GitHub setup for those who prefer institutional accounts.</span>
+<span id="cb11-380"><a href="#cb11-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-381"><a href="#cb11-381" aria-hidden="true" tabindex="-1"></a>**Create new GitHub repository on github.umn.edu:**</span>
+<span id="cb11-382"><a href="#cb11-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-383"><a href="#cb11-383" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Go to github.umn.edu → New Repository</span>
+<span id="cb11-384"><a href="#cb11-384" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Name: "lecture2-demo-enterprise"</span>
+<span id="cb11-385"><a href="#cb11-385" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Private repository</span>
+<span id="cb11-386"><a href="#cb11-386" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Initialize with README: Yes</span>
+<span id="cb11-387"><a href="#cb11-387" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Add .gitignore: R</span>
+<span id="cb11-388"><a href="#cb11-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-389"><a href="#cb11-389" aria-hidden="true" tabindex="-1"></a>**Clone to RStudio:**</span>
+<span id="cb11-390"><a href="#cb11-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-391"><a href="#cb11-391" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In RStudio: File → New Project → Version Control → Git</span>
+<span id="cb11-392"><a href="#cb11-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-393"><a href="#cb11-393" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Repository URL: <span class="co">[</span><span class="ot">https://github.umn.edu/\[username\]/lecture2-demo-enterprise.git</span><span class="co">](https://github.umn.edu/[username]/lecture2-demo-enterprise.git)</span></span>
+<span id="cb11-394"><a href="#cb11-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-395"><a href="#cb11-395" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Choose location and create project</span>
+<span id="cb11-396"><a href="#cb11-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-397"><a href="#cb11-397" aria-hidden="true" tabindex="-1"></a>**Configure R for Enterprise GitHub:**</span>
+<span id="cb11-398"><a href="#cb11-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-401"><a href="#cb11-401" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-402"><a href="#cb11-402" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-403"><a href="#cb11-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-404"><a href="#cb11-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-405"><a href="#cb11-405" aria-hidden="true" tabindex="-1"></a><span class="co"># Enterprise requires special configuration</span></span>
+<span id="cb11-406"><a href="#cb11-406" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb11-407"><a href="#cb11-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-408"><a href="#cb11-408" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure .Rprofile for enterprise</span></span>
+<span id="cb11-409"><a href="#cb11-409" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span>
+<span id="cb11-410"><a href="#cb11-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-411"><a href="#cb11-411" aria-hidden="true" tabindex="-1"></a><span class="co"># Show adding these lines:</span></span>
+<span id="cb11-412"><a href="#cb11-412" aria-hidden="true" tabindex="-1"></a><span class="co"># options(</span></span>
+<span id="cb11-413"><a href="#cb11-413" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.protocol = "https",</span></span>
+<span id="cb11-414"><a href="#cb11-414" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.host = "https://github.umn.edu",</span></span>
+<span id="cb11-415"><a href="#cb11-415" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.github_host = "https://github.umn.edu"</span></span>
+<span id="cb11-416"><a href="#cb11-416" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb11-417"><a href="#cb11-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-418"><a href="#cb11-418" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart R to load changes</span></span>
+<span id="cb11-419"><a href="#cb11-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-420"><a href="#cb11-420" aria-hidden="true" tabindex="-1"></a><span class="co"># Create enterprise token</span></span>
+<span id="cb11-421"><a href="#cb11-421" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb11-422"><a href="#cb11-422" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">"https://github.umn.edu"</span>,</span>
+<span id="cb11-423"><a href="#cb11-423" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb11-424"><a href="#cb11-424" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"Demo-Enterprise-Access"</span></span>
+<span id="cb11-425"><a href="#cb11-425" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-426"><a href="#cb11-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-427"><a href="#cb11-427" aria-hidden="true" tabindex="-1"></a><span class="co"># Store enterprise token</span></span>
+<span id="cb11-428"><a href="#cb11-428" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>(<span class="at">url =</span> <span class="st">"https://github.umn.edu"</span>)</span>
+<span id="cb11-429"><a href="#cb11-429" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-430"><a href="#cb11-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-431"><a href="#cb11-431" aria-hidden="true" tabindex="-1"></a>**Verify it Worked:**</span>
+<span id="cb11-432"><a href="#cb11-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-435"><a href="#cb11-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-436"><a href="#cb11-436" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-437"><a href="#cb11-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-438"><a href="#cb11-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-439"><a href="#cb11-439" aria-hidden="true" tabindex="-1"></a><span class="co"># Test your setup</span></span>
+<span id="cb11-440"><a href="#cb11-440" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">'https://github.umn.edu/api/v3'</span>)</span>
+<span id="cb11-441"><a href="#cb11-441" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-442"><a href="#cb11-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-443"><a href="#cb11-443" aria-hidden="true" tabindex="-1"></a>Should return your user information if working correctly.</span>
+<span id="cb11-444"><a href="#cb11-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-445"><a href="#cb11-445" aria-hidden="true" tabindex="-1"></a><span class="fu">### Git Cycle</span></span>
+<span id="cb11-446"><a href="#cb11-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-447"><a href="#cb11-447" aria-hidden="true" tabindex="-1"></a>This is the basic cycle: **Edit → Stage → Commit → Push**.</span>
+<span id="cb11-448"><a href="#cb11-448" aria-hidden="true" tabindex="-1"></a>The process is identical regardless of which GitHub account type you choose.</span>
+<span id="cb11-449"><a href="#cb11-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-450"><a href="#cb11-450" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Add file(s)</span>
+<span id="cb11-451"><a href="#cb11-451" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Stage the file (check the box in the <span class="in">`Git`</span> tab – found in Environment pane)</span>
+<span id="cb11-452"><a href="#cb11-452" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Click **Commit** (review changes opens in a new window).</span>
+<span id="cb11-453"><a href="#cb11-453" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Write commit message: "Add first reproducible analysis"</span>
+<span id="cb11-454"><a href="#cb11-454" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Click **Commit**</span>
+<span id="cb11-455"><a href="#cb11-455" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>Click **Push**</span>
+<span id="cb11-456"><a href="#cb11-456" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>Revise file(s)</span>
+<span id="cb11-457"><a href="#cb11-457" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**Stage → Commit → Push**</span>
+<span id="cb11-458"><a href="#cb11-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-459"><a href="#cb11-459" aria-hidden="true" tabindex="-1"></a><span class="fu"># Collaborative Git Setup by Account Type (`We Do`)</span></span>
+<span id="cb11-460"><a href="#cb11-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-461"><a href="#cb11-461" aria-hidden="true" tabindex="-1"></a>Quick show of hands:</span>
+<span id="cb11-462"><a href="#cb11-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-463"><a href="#cb11-463" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Who is using **Personal GitHub** (github.com)? This is recommended for most students.</span>
+<span id="cb11-464"><a href="#cb11-464" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Who is using **UMN Enterprise GitHub** (github.umn.edu)?</span>
+<span id="cb11-465"><a href="#cb11-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-466"><a href="#cb11-466" aria-hidden="true" tabindex="-1"></a>Great!</span>
+<span id="cb11-467"><a href="#cb11-467" aria-hidden="true" tabindex="-1"></a>Now let's work through setup for each group.</span>
+<span id="cb11-468"><a href="#cb11-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-469"><a href="#cb11-469" aria-hidden="true" tabindex="-1"></a><span class="fu">## Personal GitHub Group:</span></span>
+<span id="cb11-470"><a href="#cb11-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-473"><a href="#cb11-473" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-474"><a href="#cb11-474" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-475"><a href="#cb11-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-476"><a href="#cb11-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-477"><a href="#cb11-477" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal GitHub users - this should be straightforward</span></span>
+<span id="cb11-478"><a href="#cb11-478" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb11-479"><a href="#cb11-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-480"><a href="#cb11-480" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Check configuration (should already be correct)</span></span>
+<span id="cb11-481"><a href="#cb11-481" aria-hidden="true" tabindex="-1"></a><span class="fu">git_sitrep</span>()</span>
+<span id="cb11-482"><a href="#cb11-482" aria-hidden="true" tabindex="-1"></a><span class="co"># Should show: Default GitHub host: "https://github.com"</span></span>
+<span id="cb11-483"><a href="#cb11-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-484"><a href="#cb11-484" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create token (opens github.com)</span></span>
+<span id="cb11-485"><a href="#cb11-485" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb11-486"><a href="#cb11-486" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb11-487"><a href="#cb11-487" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"APEC8221-Personal-Access"</span></span>
+<span id="cb11-488"><a href="#cb11-488" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-489"><a href="#cb11-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-490"><a href="#cb11-490" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Store token</span></span>
+<span id="cb11-491"><a href="#cb11-491" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>()</span>
+<span id="cb11-492"><a href="#cb11-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-493"><a href="#cb11-493" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Test connection</span></span>
+<span id="cb11-494"><a href="#cb11-494" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>()</span>
+<span id="cb11-495"><a href="#cb11-495" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-496"><a href="#cb11-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-497"><a href="#cb11-497" aria-hidden="true" tabindex="-1"></a><span class="fu">## Enterprise GitHub Group:</span></span>
+<span id="cb11-498"><a href="#cb11-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-501"><a href="#cb11-501" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-502"><a href="#cb11-502" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-503"><a href="#cb11-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-504"><a href="#cb11-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-505"><a href="#cb11-505" aria-hidden="true" tabindex="-1"></a><span class="co"># Enterprise GitHub users - need special configuration</span></span>
+<span id="cb11-506"><a href="#cb11-506" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb11-507"><a href="#cb11-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-508"><a href="#cb11-508" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Configure .Rprofile</span></span>
+<span id="cb11-509"><a href="#cb11-509" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span>
+<span id="cb11-510"><a href="#cb11-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-511"><a href="#cb11-511" aria-hidden="true" tabindex="-1"></a><span class="co"># Add these lines to .Rprofile:</span></span>
+<span id="cb11-512"><a href="#cb11-512" aria-hidden="true" tabindex="-1"></a><span class="co"># options(</span></span>
+<span id="cb11-513"><a href="#cb11-513" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.protocol = "https",</span></span>
+<span id="cb11-514"><a href="#cb11-514" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.host = "https://github.umn.edu", </span></span>
+<span id="cb11-515"><a href="#cb11-515" aria-hidden="true" tabindex="-1"></a><span class="co">#   usethis.github_host = "https://github.umn.edu"</span></span>
+<span id="cb11-516"><a href="#cb11-516" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb11-517"><a href="#cb11-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-518"><a href="#cb11-518" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Restart R (Session → Restart R)</span></span>
+<span id="cb11-519"><a href="#cb11-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-520"><a href="#cb11-520" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Create enterprise token</span></span>
+<span id="cb11-521"><a href="#cb11-521" aria-hidden="true" tabindex="-1"></a><span class="fu">create_github_token</span>(</span>
+<span id="cb11-522"><a href="#cb11-522" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">"https://github.umn.edu"</span>,</span>
+<span id="cb11-523"><a href="#cb11-523" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="fu">c</span>(<span class="st">"repo"</span>, <span class="st">"user"</span>, <span class="st">"workflow"</span>),</span>
+<span id="cb11-524"><a href="#cb11-524" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">"APEC8221-Enterprise-Access"</span>  </span>
+<span id="cb11-525"><a href="#cb11-525" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-526"><a href="#cb11-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-527"><a href="#cb11-527" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Store enterprise token</span></span>
+<span id="cb11-528"><a href="#cb11-528" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>(<span class="at">url =</span> <span class="st">"https://github.umn.edu"</span>)</span>
+<span id="cb11-529"><a href="#cb11-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-530"><a href="#cb11-530" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Test enterprise connection</span></span>
+<span id="cb11-531"><a href="#cb11-531" aria-hidden="true" tabindex="-1"></a>gh<span class="sc">::</span><span class="fu">gh_whoami</span>(<span class="at">.api_url =</span> <span class="st">"https://github.umn.edu/api/v3"</span>)</span>
+<span id="cb11-532"><a href="#cb11-532" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-533"><a href="#cb11-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-534"><a href="#cb11-534" aria-hidden="true" tabindex="-1"></a><span class="fu"># Create Course Repository by Account Type (`You Do`)</span></span>
+<span id="cb11-535"><a href="#cb11-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-536"><a href="#cb11-536" aria-hidden="true" tabindex="-1"></a>Now you're going to create your course repository using your existing GitHub account.</span>
+<span id="cb11-537"><a href="#cb11-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-538"><a href="#cb11-538" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb11-539"><a href="#cb11-539" aria-hidden="true" tabindex="-1"></a>Remember: **authentication issues are normal for both account types** - I'm here to help.</span>
+<span id="cb11-540"><a href="#cb11-540" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-541"><a href="#cb11-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-542"><a href="#cb11-542" aria-hidden="true" tabindex="-1"></a><span class="fu">## For Personal GitHub Users (github.com):</span></span>
+<span id="cb11-543"><a href="#cb11-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-544"><a href="#cb11-544" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: Create Repository</span></span>
+<span id="cb11-545"><a href="#cb11-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-546"><a href="#cb11-546" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Go to **github.com**</span>
+<span id="cb11-547"><a href="#cb11-547" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Click "New Repository"</span>
+<span id="cb11-548"><a href="#cb11-548" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Name: <span class="in">`apec8221-[your-umn-id]`</span> (e.g., <span class="in">`apec8221-smith123`</span>)</span>
+<span id="cb11-549"><a href="#cb11-549" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Description: "APEC 8221 Programming for Econometrics coursework"</span>
+<span id="cb11-550"><a href="#cb11-550" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**IMPORTANT: Make it PRIVATE**</span>
+<span id="cb11-551"><a href="#cb11-551" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Initialize with README: Yes</span>
+<span id="cb11-552"><a href="#cb11-552" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Add .gitignore: R</span>
+<span id="cb11-553"><a href="#cb11-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-554"><a href="#cb11-554" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: Add Collaborator</span></span>
+<span id="cb11-555"><a href="#cb11-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-556"><a href="#cb11-556" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Settings → Manage access → Invite collaborator</span>
+<span id="cb11-557"><a href="#cb11-557" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Username: <span class="in">`joglekar`</span></span>
+<span id="cb11-558"><a href="#cb11-558" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Send invitation</span>
+<span id="cb11-559"><a href="#cb11-559" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-560"><a href="#cb11-560" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: Clone to RStudio</span></span>
+<span id="cb11-561"><a href="#cb11-561" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-562"><a href="#cb11-562" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Copy repository URL: <span class="in">`https://github.com/[your-username]/apec8221-[umn-id].git`</span></span>
+<span id="cb11-563"><a href="#cb11-563" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In RStudio: File → New Project → Version Control → Git</span>
+<span id="cb11-564"><a href="#cb11-564" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Paste URL, choose location, create project</span>
+<span id="cb11-565"><a href="#cb11-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-566"><a href="#cb11-566" aria-hidden="true" tabindex="-1"></a><span class="fu">## For Enterprise GitHub Users (github.umn.edu):</span></span>
+<span id="cb11-567"><a href="#cb11-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-568"><a href="#cb11-568" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: Create Repository</span></span>
+<span id="cb11-569"><a href="#cb11-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-570"><a href="#cb11-570" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Go to **github.umn.edu**</span>
+<span id="cb11-571"><a href="#cb11-571" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Name: <span class="in">`apec8221-[your-umn-id]`</span> (e.g., <span class="in">`apec8221-smith123`</span>)</span>
+<span id="cb11-572"><a href="#cb11-572" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Description: "APEC 8221 Programming for Econometrics coursework"</span>
+<span id="cb11-573"><a href="#cb11-573" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**IMPORTANT: Make it PRIVATE**</span>
+<span id="cb11-574"><a href="#cb11-574" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Initialize with README: Yes</span>
+<span id="cb11-575"><a href="#cb11-575" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Add .gitignore: R</span>
+<span id="cb11-576"><a href="#cb11-576" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-577"><a href="#cb11-577" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: Add Collaborator</span></span>
+<span id="cb11-578"><a href="#cb11-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-579"><a href="#cb11-579" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Username: <span class="in">`joglekar`</span> (same for both account types)</span>
+<span id="cb11-580"><a href="#cb11-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-581"><a href="#cb11-581" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: Clone to RStudio</span></span>
+<span id="cb11-582"><a href="#cb11-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-583"><a href="#cb11-583" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Copy repository URL: <span class="in">`https://github.umn.edu/[your-username]/apec8221-[umn-id].git`</span></span>
+<span id="cb11-584"><a href="#cb11-584" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In RStudio: File → New Project → Version Control → Git</span>
+<span id="cb11-585"><a href="#cb11-585" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Paste URL, choose location, create project</span>
+<span id="cb11-586"><a href="#cb11-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-587"><a href="#cb11-587" aria-hidden="true" tabindex="-1"></a><span class="fu"># Backup Document in GitHub (`You Do`)</span></span>
+<span id="cb11-588"><a href="#cb11-588" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-589"><a href="#cb11-589" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 1: Create First Quarto Document</span></span>
+<span id="cb11-590"><a href="#cb11-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-591"><a href="#cb11-591" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In RStudio: File → New File → Quarto</span>
+<span id="cb11-592"><a href="#cb11-592" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Document Title: "APEC 8221 - My Research Workflow"</span>
+<span id="cb11-593"><a href="#cb11-593" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Save as: hello_quarto.qmd</span>
+<span id="cb11-594"><a href="#cb11-594" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-595"><a href="#cb11-595" aria-hidden="true" tabindex="-1"></a>**Use this content:**</span>
+<span id="cb11-596"><a href="#cb11-596" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-597"><a href="#cb11-597" aria-hidden="true" tabindex="-1"></a><span class="in">````         </span></span>
+<span id="cb11-598"><a href="#cb11-598" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-599"><a href="#cb11-599" aria-hidden="true" tabindex="-1"></a><span class="in">title: "APEC 8221 - My Research Workflow"</span></span>
+<span id="cb11-600"><a href="#cb11-600" aria-hidden="true" tabindex="-1"></a><span class="in">author: "[Your Name]"</span></span>
+<span id="cb11-601"><a href="#cb11-601" aria-hidden="true" tabindex="-1"></a><span class="in">date: today</span></span>
+<span id="cb11-602"><a href="#cb11-602" aria-hidden="true" tabindex="-1"></a><span class="in">format: pdf</span></span>
+<span id="cb11-603"><a href="#cb11-603" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb11-604"><a href="#cb11-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-605"><a href="#cb11-605" aria-hidden="true" tabindex="-1"></a><span class="in"># Introduction</span></span>
+<span id="cb11-606"><a href="#cb11-606" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-607"><a href="#cb11-607" aria-hidden="true" tabindex="-1"></a><span class="in">This is my first reproducible document for APEC 8221 using [Personal/Enterprise] GitHub.</span></span>
+<span id="cb11-608"><a href="#cb11-608" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-609"><a href="#cb11-609" aria-hidden="true" tabindex="-1"></a><span class="in">## Basic R Skills</span></span>
+<span id="cb11-610"><a href="#cb11-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-613"><a href="#cb11-613" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-614"><a href="#cb11-614" aria-hidden="true" tabindex="-1"></a><span class="in"># Demonstrate basic R commands</span></span>
+<span id="cb11-615"><a href="#cb11-615" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb11-616"><a href="#cb11-616" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-617"><a href="#cb11-617" aria-hidden="true" tabindex="-1"></a><span class="in"># Create some data</span></span>
+<span id="cb11-618"><a href="#cb11-618" aria-hidden="true" tabindex="-1"></a><span class="in">my_data &lt;- data.frame(</span></span>
+<span id="cb11-619"><a href="#cb11-619" aria-hidden="true" tabindex="-1"></a><span class="in">  x = 1:10,</span></span>
+<span id="cb11-620"><a href="#cb11-620" aria-hidden="true" tabindex="-1"></a><span class="in">  y = (1:10)^2 + rnorm(10, 0, 5)</span></span>
+<span id="cb11-621"><a href="#cb11-621" aria-hidden="true" tabindex="-1"></a><span class="in">)</span></span>
+<span id="cb11-622"><a href="#cb11-622" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-623"><a href="#cb11-623" aria-hidden="true" tabindex="-1"></a><span class="in"># Summary statistics</span></span>
+<span id="cb11-624"><a href="#cb11-624" aria-hidden="true" tabindex="-1"></a><span class="in">summary(my_data)</span></span>
+<span id="cb11-625"><a href="#cb11-625" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-626"><a href="#cb11-626" aria-hidden="true" tabindex="-1"></a><span class="in"># Store values for inline use</span></span>
+<span id="cb11-627"><a href="#cb11-627" aria-hidden="true" tabindex="-1"></a><span class="in">mean_x &lt;- mean(my_data$x)</span></span>
+<span id="cb11-628"><a href="#cb11-628" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-629"><a href="#cb11-629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-630"><a href="#cb11-630" aria-hidden="true" tabindex="-1"></a><span class="in">The average of variable `x` is `{r} round(mean_x, 1)`. </span></span>
+<span id="cb11-631"><a href="#cb11-631" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-632"><a href="#cb11-632" aria-hidden="true" tabindex="-1"></a><span class="in">## My First Plot</span></span>
+<span id="cb11-633"><a href="#cb11-633" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-636"><a href="#cb11-636" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-637"><a href="#cb11-637" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(my_data, aes(x = x, y = y)) +</span></span>
+<span id="cb11-638"><a href="#cb11-638" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(size = 3, color = "steelblue") +</span></span>
+<span id="cb11-639"><a href="#cb11-639" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_smooth(method = "lm", se = FALSE) +</span></span>
+<span id="cb11-640"><a href="#cb11-640" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(</span></span>
+<span id="cb11-641"><a href="#cb11-641" aria-hidden="true" tabindex="-1"></a><span class="in">    title = "My First Reproducible Plot",</span></span>
+<span id="cb11-642"><a href="#cb11-642" aria-hidden="true" tabindex="-1"></a><span class="in">    x = "X Variable",</span></span>
+<span id="cb11-643"><a href="#cb11-643" aria-hidden="true" tabindex="-1"></a><span class="in">    y = "Y Variable"</span></span>
+<span id="cb11-644"><a href="#cb11-644" aria-hidden="true" tabindex="-1"></a><span class="in">  ) +</span></span>
+<span id="cb11-645"><a href="#cb11-645" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_minimal()</span></span>
+<span id="cb11-646"><a href="#cb11-646" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-647"><a href="#cb11-647" aria-hidden="true" tabindex="-1"></a><span class="in">````</span></span>
+<span id="cb11-648"><a href="#cb11-648" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-649"><a href="#cb11-649" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 2: Git Workflow Practice (Same for Both Account Types)</span></span>
+<span id="cb11-650"><a href="#cb11-650" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-651"><a href="#cb11-651" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Render the document (make sure it works!)</span>
+<span id="cb11-652"><a href="#cb11-652" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Look at Git tab - see the new files?</span>
+<span id="cb11-653"><a href="#cb11-653" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Stage the files (check boxes for <span class="in">`.qmd`</span> and <span class="in">`.pdf/.html`</span>)</span>
+<span id="cb11-654"><a href="#cb11-654" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Commit with message: "Add first reproducible analysis with <span class="sc">\[</span>Personal/Enterprise<span class="sc">\]</span> GitHub"</span>
+<span id="cb11-655"><a href="#cb11-655" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Push to GitHub (authentication happens here!)</span>
+<span id="cb11-656"><a href="#cb11-656" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-657"><a href="#cb11-657" aria-hidden="true" tabindex="-1"></a><span class="fu">## Account-Specific Troubleshooting During Exercise:</span></span>
+<span id="cb11-658"><a href="#cb11-658" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-659"><a href="#cb11-659" aria-hidden="true" tabindex="-1"></a><span class="fu">### Personal GitHub Issues:</span></span>
+<span id="cb11-660"><a href="#cb11-660" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-661"><a href="#cb11-661" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Token problems:** Make sure <span class="in">`create_github_token()`</span> opened <span class="co">[</span><span class="ot">github.com</span><span class="co">](https:/github.com)</span> (not <span class="co">[</span><span class="ot">github.umn.edu</span><span class="co">](https://github.umn.edu)</span>)</span>
+<span id="cb11-662"><a href="#cb11-662" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Repository URL:** Should start with <span class="in">`https://github.com/`</span> (not github.umn.edu)</span>
+<span id="cb11-663"><a href="#cb11-663" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Test command:** <span class="in">`gh::gh_whoami()`</span> (no additional parameters needed)</span>
+<span id="cb11-664"><a href="#cb11-664" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-665"><a href="#cb11-665" aria-hidden="true" tabindex="-1"></a><span class="fu">### Enterprise GitHub Issues:</span></span>
+<span id="cb11-666"><a href="#cb11-666" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-667"><a href="#cb11-667" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Wrong host:** Check that <span class="in">`git_sitrep()`</span> shows github.umn.edu as default host</span>
+<span id="cb11-668"><a href="#cb11-668" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Token problems:** Make sure <span class="in">`create_github_token(host = "https://github.umn.edu")`</span> opened the enterprise site</span>
+<span id="cb11-669"><a href="#cb11-669" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Repository URL:** Should start with <span class="in">`https://github.umn.edu/`</span></span>
+<span id="cb11-670"><a href="#cb11-670" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Test command:** <span class="in">`gh::gh_whoami(.api_url = "https://github.umn.edu/api/v3")`</span></span>
+<span id="cb11-671"><a href="#cb11-671" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-672"><a href="#cb11-672" aria-hidden="true" tabindex="-1"></a><span class="fu"># Wrap-up</span></span>
+<span id="cb11-673"><a href="#cb11-673" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-674"><a href="#cb11-674" aria-hidden="true" tabindex="-1"></a><span class="fu">## Check Success by Account Type:</span></span>
+<span id="cb11-675"><a href="#cb11-675" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-676"><a href="#cb11-676" aria-hidden="true" tabindex="-1"></a>Quick show of hands:</span>
+<span id="cb11-677"><a href="#cb11-677" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-678"><a href="#cb11-678" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Personal GitHub users who successfully pushed to github.com?</span>
+<span id="cb11-679"><a href="#cb11-679" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Enterprise GitHub users who successfully pushed to github.umn.edu?</span>
+<span id="cb11-680"><a href="#cb11-680" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-681"><a href="#cb11-681" aria-hidden="true" tabindex="-1"></a>If you didn't get there today with either account type, **don't panic**.</span>
+<span id="cb11-682"><a href="#cb11-682" aria-hidden="true" tabindex="-1"></a>Post your issue on the Canvas discussion board or email me your exact error message **and which account type you're using**.</span>
+<span id="cb11-683"><a href="#cb11-683" aria-hidden="true" tabindex="-1"></a>We'll get it working.</span>
+<span id="cb11-684"><a href="#cb11-684" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-685"><a href="#cb11-685" aria-hidden="true" tabindex="-1"></a><span class="fu">## Assignment 0 Part 4:</span></span>
+<span id="cb11-686"><a href="#cb11-686" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-687"><a href="#cb11-687" aria-hidden="true" tabindex="-1"></a>Now you can complete the rest of Assignment 0.</span>
+<span id="cb11-688"><a href="#cb11-688" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-689"><a href="#cb11-689" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading Assignment for Tuesday:</span></span>
+<span id="cb11-690"><a href="#cb11-690" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-691"><a href="#cb11-691" aria-hidden="true" tabindex="-1"></a>Tuesday we dive into data manipulation with <span class="in">`dplyr`</span> - the heart of <span class="in">`tidyverse`</span>.</span>
+<span id="cb11-692"><a href="#cb11-692" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-693"><a href="#cb11-693" aria-hidden="true" tabindex="-1"></a>For Tuesday's class on data manipulation, please read:</span>
+<span id="cb11-694"><a href="#cb11-694" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-695"><a href="#cb11-695" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**R4DS Chapter 3 (Data Transformation)** - the core <span class="in">`dplyr`</span> verbs we'll use constantly</span>
+<span id="cb11-696"><a href="#cb11-696" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-697"><a href="#cb11-697" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**R4DS Chapter 7 (Data Import)** - reading files with <span class="in">`readr`</span></span>
+<span id="cb11-698"><a href="#cb11-698" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-699"><a href="#cb11-699" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**R4DS Chapter 27.2-27.3 (A Field Guide to Base R)** - selecting elements from vectors and data frames</span>
+<span id="cb11-700"><a href="#cb11-700" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-701"><a href="#cb11-701" aria-hidden="true" tabindex="-1"></a>Chapter 3 is the most important - focus there if you're short on time.</span>
+<span id="cb11-702"><a href="#cb11-702" aria-hidden="true" tabindex="-1"></a>We'll be using <span class="in">`filter()`</span>, <span class="in">`select()`</span>, <span class="in">`mutate()`</span>, <span class="in">`group_by()`</span>, and <span class="in">`summarise()`</span> extensively.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

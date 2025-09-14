@@ -1,0 +1,790 @@
+---
+title: "Lecture 4: Introduction to Visualization"
+subtitle: "APEC 8221: Programming for Econometrics"
+author: "Ali Joglekar"
+date: "September 11, 2025"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  eval: true
+  echo: true
+editor: visual
+---
+
+# Opening
+
+## Recap
+
+**Quick reminder of what we learned Tuesday:**
+
+-   The five core `dplyr` verbs for data manipulation:
+    -   `select()`
+    -   `filter()`
+    -   `arrange()`
+    -   `mutate()`
+    -   `summarise()`
+-   The pipe operator `%>%` (or `|>`) for readable code chains
+-   Grouped operations with `group_by()`
+
+Who successfully completed the `dplyr` exercises from Tuesday?
+Any lingering questions?
+
+## Today's Mission
+
+Today we're adding the **visualization** layer to your toolkit.
+You'll learn to create publication-quality graphics using `ggplot2`—the most powerful and flexible plotting system in R.
+
+**Why this matters for social scientists:**
+
+-   **Exploratory Data Analysis:** Quickly spot patterns, outliers, and relationships
+-   **Publication Figures:** Create journal-ready plots with precise control
+-   **Presentation Graphics:** Communicate findings clearly to diverse audiences
+-   **Reproducible Visuals:** Plots that update automatically when data changes
+
+By the end of today, you'll be creating multi-layered, customized plots that would take hours in Excel—and they'll look much better!
+
+# The Grammar of Graphics (`I Do`)
+
+## Philosophy: Plots as Sentences
+
+Think of `ggplot2` as a **grammar** for creating graphics.
+Just like English has nouns, verbs, and adjectives, plots have:
+
+-   **Data:** What you're plotting
+-   **Aesthetics:** How variables map to visual properties (x, y, color, size)
+-   **Geometries:** The visual elements (points, lines, bars)
+-   **Scales:** How aesthetics are displayed (axis limits, color schemes)
+-   **Themes:** Overall appearance (fonts, background, grid lines)
+
+The key insight: **Every plot tells a story by layering these components together.**
+
+## Core ggplot2 Concepts
+
+### The Basic Template
+
+```{r}
+#| label: ggplot-template
+#| eval: false
+
+ggplot(data = <DATA>) +
+  aes(x = <X_VAR>, y = <Y_VAR>) +
+  <GEOM_FUNCTION>() +
+  labs(title = <TITLE>, x = <X_LABEL>, y = <Y_LABEL>)
+```
+
+### Three Essential Components
+
+1.  **Data:** Always a data frame
+2.  **Aesthetic mappings:** `aes()` – how variables map to plot features
+3.  **Geometric objects:** `geom_*()` – the visual elements
+
+Let's see this in action with real economic data.
+
+## Building a Plot Layer by Layer
+
+```{r}
+#| label: demo-setup
+
+# Load our tools
+library(tidyverse)
+library(gapminder)
+
+# Look at our economic data
+glimpse(gapminder)
+```
+
+### Step 1: Start with Data
+
+```{r}
+#| label: demo-step1
+
+# Step 1: Just the data and coordinate system
+p1 <- ggplot(data = gapminder)
+print(p1)
+```
+
+Nothing appears!
+We have a plotting canvas but no instructions about what to plot.
+
+### Step 2: Add Aesthetic Mappings
+
+```{r}
+#| label: demo-step2
+
+# Step 2: Tell ggplot which variables to use
+p2 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp))
+print(p2)
+```
+
+Now we have axes!
+`ggplot2` knows we want GDP per capita on x-axis and life expectancy on y-axis.
+But still no data points.
+
+### Step 3: Add a Geometry
+
+```{r}
+#| label: demo-step3
+
+# Step 3: Add points to see the data
+p3 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+print(p3)
+```
+
+**Economic insight:** Wow!
+There's a clear positive relationship between wealth and health.
+But it's not linear—looks logarithmic.
+
+### Step 4: Add More Aesthetic Mappings
+
+```{r}
+#| label: demo-step4
+
+# Step 4: Color by continent to see regional patterns
+p4 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point()
+print(p4)
+```
+
+**Economic insight:** Africa consistently shows lower life expectancy and GDP.
+Europe and Oceania cluster in the high-wealth, high-health region.
+
+### Step 5: Add More Geometries
+
+```{r}
+#| label: demo-step5
+
+# Step 5: Add a trend line to quantify the relationship
+p5 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+print(p5)
+```
+
+**Economic insight:** Each continent shows the same positive wealth-health relationship, but with different intercepts.
+This suggests regional factors beyond just GDP matter.
+
+### Step 6: Professional Labels
+
+```{r}
+#| label: demo-step6
+
+# Step 6: Add publication-quality labels
+p6 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Wealth and Health: The Global Relationship",
+    subtitle = "GDP per capita vs. Life Expectancy by Continent (1952-2007)",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)",
+    color = "Continent",
+    caption = "Data: Gapminder Foundation"
+  )
+print(p6)
+```
+
+### Step 7: Professional Theme
+
+```{r}
+#| label: demo-step7
+
+# Step 7: Apply a clean, professional theme
+p7 <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(alpha = 0.6) +  # Make points slightly transparent
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Wealth and Health: The Global Relationship",
+    subtitle = "GDP per capita vs. Life Expectancy by Continent (1952-2007)",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)",
+    color = "Continent",
+    caption = "Data: Gapminder Foundation"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    legend.position = "bottom"
+  )
+print(p7)
+```
+
+**This is publication-ready!** Seven steps from blank canvas to professional economic analysis.
+
+## Key ggplot2 Principles
+
+### 1. Aesthetic Mappings vs. Fixed Values
+
+::: callout-caution
+This is the #1 source of `ggplot2` confusion!
+:::
+
+```{r}
+#| label: aes-vs-fixed
+#| eval: false
+
+# WRONG: This makes all points the same color (and it's not red!)
+ggplot(mtcars, aes(x = mpg, y = hp, color = "red")) + geom_point()
+
+# RIGHT: This makes all points red
+ggplot(mtcars, aes(x = mpg, y = hp)) + geom_point(color = "red")
+
+# RIGHT: This colors points by a variable
+ggplot(mtcars, aes(x = mpg, y = hp, color = cyl)) + geom_point()
+```
+
+**Rule:** Inside `aes()` ⟶ varies with data.
+Outside `aes()` ⟶ fixed value.
+
+### 2. Layer by Layer Construction
+
+Every `+` adds a new layer.
+Order matters!
+
+```{r}
+#| label: layer-order
+
+# Points on top of smooth
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_smooth() +
+  geom_point()
+
+# Smooth on top of points  
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth()
+```
+
+### 3. Common Geometries for Economics
+
+```{r}
+#| label: common-geoms
+#| eval: false
+
+# Scatter plots - relationships
+geom_point()
+
+# Line plots - time series
+geom_line()
+
+# Bar plots - comparisons
+geom_col()       # heights are data values
+geom_bar()       # heights are counts
+
+# Histograms - distributions
+geom_histogram()
+
+# Box plots - comparing distributions
+geom_boxplot()
+```
+
+# Debugging Interlude: Common ggplot2 Errors
+
+Let's intentionally make some common mistakes and learn how to fix them.
+
+## Error 1: Aesthetic vs. Fixed Values (VERY Common!)
+
+```{r}
+#| label: debug-aes-error
+#| error: true
+
+# This WON'T work as expected:
+p_wrong <- ggplot(mtcars, aes(x = mpg, y = hp, color = "red")) + 
+  geom_point() +
+  labs(title = "Wrong: Color inside aes()")
+print(p_wrong)
+
+# This WILL work:
+p_right <- ggplot(mtcars, aes(x = mpg, y = hp)) + 
+  geom_point(color = "red") +
+  labs(title = "Correct: Fixed color outside aes()")
+print(p_right)
+```
+
+## Error 2: Missing + Between Layers
+
+```{r}
+#| label: debug-plus-error
+#| eval: false
+#| error: true
+
+
+# This would cause an error:
+ggplot(mtcars, aes(x = mpg, y = hp))
+  geom_point()
+```
+
+## Debugging Strategy: Building Plots Layer by Layer
+
+```{r}
+#| label: debug-layer-strategy
+
+# Step 1: Start with base
+p_base <- ggplot(mtcars, aes(x = mpg, y = hp))
+print(p_base)  # Will show empty plot
+
+# Step 2: Add geometry
+p_points <- p_base + geom_point()
+print(p_points)
+
+# Step 3: Add labels
+p_final <- p_points + labs(title = "My Plot", x = "MPG", y = "HP")
+print(p_final)
+```
+
+**Your ggplot2 debugging workflow:**
+
+1.  **BUILD** plots layer by layer
+2.  **REMEMBER**: aesthetics vs. fixed values
+3.  **CHECK** that every layer has a `+` before it
+4.  **TEST** each layer individually
+
+# Guided Practice (`We Do`)
+
+## Challenge: Add Population Information
+
+Looking at our wealth-health plot, I want to incorporate country size (population) into the visualization.
+
+> What aesthetic mapping would show population size?
+
+```{r}
+#| label: we-do-population
+
+# Our current plot
+base_plot <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Wealth and Health by Continent",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)",
+    color = "Continent", 
+    caption = "Data: Gapminder Foundation"
+  ) +
+  theme_minimal() + 
+  theme(
+    plot.caption.position = "plot"
+  )
+
+print(base_plot)
+
+# Add population as ...
+enhanced_plot <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Wealth, Health and Population by Continent",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)",
+    color = "Continent", 
+    caption = "Data: Gapminder Foundation"
+  ) +
+  theme_minimal()
+
+print(enhanced_plot)
+```
+
+::: {.callout-note collapse="true"}
+## Guided Practice Solution
+
+```{r}
+#| label: we-do-population-solution
+
+# Add population as point size
+enhanced_plot <- ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Wealth, Health and Population by Continent",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)",
+    color = "Continent",
+    size = "Population", 
+    caption = "Data: Gapminder Foundation"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.caption.position = "plot"
+  )
+
+print(enhanced_plot)
+```
+:::
+
+**Class discussion:** What economic insights do we see now?
+Which countries might be those large bubbles in the lower-left (low GDP, high population)?
+
+# Hands-On Practice (`You Do`)
+
+## Core Tasks
+
+### Core 1: Economic Comparison Visualization
+
+Create a publication-quality bar chart comparing **total GDP by continent for the year 2007**.
+This directly builds on Tuesday's continental analysis exercises!
+
+Your plot should include:
+
+1.  Filter the data to only 2007 (just like Tuesday's Exercise 3)
+2.  Calculate total GDP by continent (hint: `gdpPercap * pop` gives total GDP)
+3.  Create a bar chart with continents on x-axis, total GDP on y-axis
+4.  Add professional labels and a clean theme
+5.  Color the bars by continent
+
+**Starter code (this should look familiar from Tuesday!):**
+
+```{r}
+#| label: core-task-starter
+#| eval: false
+
+# Step 1: Prepare your data
+gdp_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  mutate(total_gdp = gdpPercap * pop) %>%
+  group_by(continent) %>%
+  summarise(total_gdp = sum(total_gdp), .groups = "drop")
+
+# Step 2: Create your plot
+ggplot(gdp_2007, aes(x = continent, y = total_gdp)) +
+  # Add your layers here
+```
+
+**Success criteria:**
+
+-   Plot displays correctly
+-   All continents are labeled clearly
+-   Y-axis shows total GDP (will be in scientific notation)
+-   Has informative title and axis labels
+-   Uses a clean theme
+
+## Extension Activities
+
+If you finished the core tasks, try these extension activities:
+
+### Extension 1: Time Series Challenge
+
+Remember Tuesday when some of you tackled the population giants exercise?
+Let's visualize that!
+
+Create a line plot showing **life expectancy over time for the 5 most populous countries in 2007**.
+
+::: callout-tip
+**Hints:**
+
+-   This is similar to Tuesday's "population giants" approach
+-   Find the 5 most populous countries in 2007
+-   Filter the full dataset to only those countries
+-   Use `geom_line()` with country as the color aesthetic
+-   Consider adding `geom_point()` for individual years
+:::
+
+**Bonus:** Add a smooth trend line across all countries using `geom_smooth()`.
+
+### Extension 2: Advanced Multi-Panel Plot
+
+Create a **faceted plot** showing the wealth-health relationship separately for each continent using `facet_wrap()`.
+
+**Requirements:**
+
+-   Scatter plot of GDP per capita vs. life expectancy
+-   Separate panel for each continent
+-   Add trend lines to each panel
+-   Professional labeling
+
+**Starter code:**
+
+```{r}
+#| label: extension-facet
+#| eval: false
+
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ continent) +
+  # Add your customizations
+```
+
+### Extension 3: Create an "Economist-Style" Plot
+
+Recreate this professional-style plot showing the relationship between wealth and health, similar to those found in *The Economist*:
+
+**Requirements:**
+
+-   Use only 2007 data
+-   Scatter plot with GDP per capita (log scale) vs. life expectancy
+-   Color points by continent
+-   Size points by population
+-   Add trend line
+-   Clean, minimal theme
+-   Economist-style fonts and colors if possible
+
+**Advanced features:**
+
+-   Log-transform the x-axis using `scale_x_log10()`
+-   Use custom colors: `scale_color_manual(values = c("Africa" = "#E74C3C", "Americas" = "#3498DB", etc.))`
+-   Add country labels for outliers using `geom_text()`
+
+## Working Solutions
+
+Here are the solutions—but seriously, don’t peek until you’ve wrestled with the problems.
+The struggle is where the learning happens.
+
+::: {.callout-note collapse="true"}
+## Core Task Solutions
+
+### Core 1 Solution
+
+```{r}
+#| label: core1-solution
+
+gdp_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  mutate(total_gdp = gdpPercap * pop) %>%
+  group_by(continent) %>%
+  summarise(total_gdp = sum(total_gdp), .groups = "drop")
+
+ggplot(gdp_2007, aes(x = continent, y = total_gdp, fill = continent)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_continuous(labels = scales::scientific) +
+  labs(
+    title = "Total GDP by Continent (2007)",
+    subtitle = "Asia dominates global economic output",
+    x = "Continent",
+    y = "Total GDP (USD)",
+    caption = "Data: Gapminder Foundation"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+**Economic insight:** Asia's total GDP dwarfs other continents, primarily driven by China and India's large populations combined with growing economies.
+:::
+
+::: {.callout-note collapse="true"}
+## Extension Activity Solutions
+
+### Extension 1: Time Series
+
+```{r}
+#| label: extension1-solution
+
+# Find 5 most populous countries in 2007
+top_countries <- gapminder %>%
+  filter(year == 2007) %>%
+  arrange(desc(pop)) %>%
+  slice_head(n = 5) %>%
+  pull(country)   # pull() extracts a single column and returns a vector
+
+# Create time series plot
+gapminder %>%
+  filter(country %in% top_countries) %>%
+  ggplot(aes(x = year, y = lifeExp, color = country)) +
+  geom_line(size = 1) +
+  geom_point() +
+  labs(
+    title = "Life Expectancy Trends: Most Populous Countries",
+    x = "Year",
+    y = "Life Expectancy (Years)",
+    color = "Country"
+  ) +
+  theme_minimal()
+```
+
+### Extension 2: Faceted Plot
+
+```{r}
+#| label: extension2-solution
+
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(alpha = 0.6, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  facet_wrap(~ continent, scales = "free_x") +
+  labs(
+    title = "Wealth-Health Relationship by Continent",
+    x = "GDP per Capita (USD)",
+    y = "Life Expectancy (Years)"
+  ) +
+  theme_minimal() +
+  theme(strip.text = element_text(face = "bold"))
+```
+
+### Extension 3: Economist Style Plot
+
+```{r}
+#| label: extension3-solution
+
+# Create an Economist-style wealth-health plot
+economist_plot <- gapminder %>%
+  filter(year == 2007) %>%
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent, size = pop), alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  scale_x_log10(
+    labels = scales::dollar_format(scale = 1e-3, suffix = "k"),
+    breaks = c(1000, 3000, 10000, 30000)
+  ) +
+  scale_y_continuous(
+    breaks = seq(40, 85, by = 10)
+  ) +
+  scale_color_manual(
+    values = c(
+      "Africa" = "#E74C3C",
+      "Americas" = "#3498DB", 
+      "Asia" = "#F39C12",
+      "Europe" = "#27AE60",
+      "Oceania" = "#9B59B6"
+    )
+  ) +
+  scale_size_continuous(
+    range = c(1, 12),
+    labels = scales::comma_format(scale = 1e-6, suffix = "M")
+  ) +
+  labs(
+    title = "Wealth and Health in 2007",
+    subtitle = "Income per person versus life expectancy",
+    x = "Income per person (GDP/capita, log scale)",
+    y = "Life expectancy (years)",
+    color = "Continent",
+    size = "Population",
+    caption = "Source: Gapminder Foundation"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", color = "#2C3E50"),
+    plot.subtitle = element_text(size = 12, color = "#34495E"),
+    axis.title = element_text(size = 11, color = "#2C3E50"),
+    legend.position = "bottom",
+    legend.box = "vertical",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "#ECF0F1", size = 0.5),
+    plot.background = element_rect(fill = "#FAFAFA", color = NA)
+  ) +
+  guides(
+    color = guide_legend(
+      override.aes = list(size = 4),
+      title.position = "top",
+      order = 1
+    ),
+    size = guide_legend(
+      title.position = "top",
+      order = 2
+    )
+  )
+
+print(economist_plot)
+
+# There are professional theme packages available through the ggthemes package
+# Use the the actual theme_economist() for a much more authentic and cleaner plot
+
+# Note: You'll need ggthemes package for theme_economist()
+# install.packages("ggthemes") if you don't have it
+
+library(ggthemes)
+
+economist_plot2 <- gapminder %>%
+  filter(year == 2007) %>%
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color = continent, size = pop), alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  scale_x_log10(
+    labels = scales::dollar_format(scale = 1e-3, suffix = "k"),
+    breaks = c(1000, 3000, 10000, 30000)
+  ) +
+  scale_y_continuous(
+    breaks = seq(40, 85, by = 10)
+  ) +
+  scale_color_economist() +  # Economist color palette
+  scale_size_continuous(
+    range = c(1, 12),
+    labels = scales::comma_format(scale = 1e-6, suffix = "M")
+  ) +
+  labs(
+    title = "Wealth and Health in 2007",
+    subtitle = "Income per person versus life expectancy",
+    x = "Income per person (GDP/capita, log scale)",
+    y = "Life expectancy (years)",
+    color = "Continent",
+    size = "Population",
+    caption = "Source: Gapminder Foundation"
+  ) +
+  theme_economist() +  # Official Economist theme
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical"
+  ) +
+  guides(
+    color = guide_legend(
+      override.aes = list(size = 4),
+      title.position = "top",
+      order = 1
+    ),
+    size = guide_legend(
+      title.position = "top",
+      order = 2
+    )
+  )
+
+print(economist_plot2)
+```
+:::
+
+# Wrap-up & Looking Ahead
+
+## What We Learned Today
+
+**The Grammar of Graphics:**
+
+-   **Data + Aesthetics + Geometries** = Complete plots
+-   **Layer-by-layer construction** for complex visualizations
+-   **Aesthetic mappings vs. fixed values**—the most important distinction
+
+**Professional Plotting Skills:**
+
+-   Publication-quality labels and themes
+-   Color and size aesthetics for additional dimensions
+-   Debugging plots by building step-by-step
+
+## Next Lecture Preview: Automation—Functions & Iteration
+
+**Tuesday we tackle code efficiency.** You'll learn to:
+
+-   Write custom functions to eliminate repetitive code
+-   Use iteration (`for` loops and `apply` functions) to automate tasks
+-   Apply the DRY principle: "Don't Repeat Yourself"
+
+## Assignment 1 Posted Tomorrow
+
+**Assignment 1: Tidyverse Fundamentals**
+
+-   **Posted:** Friday, September 12 at 5 PM
+-   **Due:** Saturday, September 20 at 8 AM
+-   **Focus:** Everything we've covered so far—`dplyr` + `ggplot2`
+
+### Reading for Tuesday
+
+**Required reading:**
+
+-   **R4DS Chapter 25 (Functions)** – Writing your own functions
+-   **R4DS Chapter 26 (Iteration)** – Repeating operations efficiently
+-   **R4DS Chapter 27.4 (`apply`)** & **27.5 (`for` loops)** – Different iteration approaches
+
+**Suggested:**
+
+-   **ERP Chapter 3 (Programming)** – More advanced programming concepts
+
+-   [vector & lists tutorial](https://jennybc.github.io/purrr-tutorial/bk00_vectors-and-lists.html) – Understanding atomic vectors and lists
+
+::: callout-note
+**Focus on Chapter 25 if you're short on time** – functions are the foundation for everything we'll do Tuesday.
+:::

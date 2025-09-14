@@ -1,0 +1,43 @@
+---
+title: "My First Quarto Report"
+author: "Yunshu Yang"
+format: html
+editor: visual
+---
+
+## 
+
+```         
+## Objective 
+This is my first Quarto document for APEC 8221
+```
+
+```         
+## Data  
+Here is a data frame of pets:
+```
+
+```{r}
+pets <- data.frame(
+  name   = c("Fido", "Whiskers", "Nemo"),
+  animal = c("Dog",  "Cat",      "Fish"),
+  age    = c(5, 8, 2)
+)
+```
+
+```{r}
+pets
+```
+
+```{r}
+max_age <- max(pets$age)
+max_age
+```
+
+## Now, let's see the output when we print the data frame:
+
+```         
+## Analysis  
+
+The maximum age of the pets is 8.
+```

@@ -1,0 +1,752 @@
+---
+title: "Lecture 3: Data Manipulation (dplyr)"
+subtitle: "APEC 8221: Programming for Econometrics"
+author: "Ali Joglekar"
+date: "September 9, 2025"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: true
+  message: true
+  eval: true
+  echo: true
+editor: visual
+---
+
+# Opening & Check-In
+
+## Assignment 0 Status Check
+
+Any lingering Git issues?
+
+## Today's Mission
+
+Today we dive into the heart of data manipulation with `dplyr`—the grammar of data transformation. By the end of today, you'll be able to take messy, real-world datasets and transform them into exactly what you need for analysis.
+
+**Why this matters:**
+
+-   Data preparation is widely recognized as the most consuming aspect of quantitative research
+    -   80/20 rule ⟶ 80% cleaning & 20% analysis
+-   `dplyr` makes this process readable, reproducible, and surprisingly enjoyable
+
+**Real scenario:** You're analyzing the impact of trade policy on economic growth. Your raw data has 47 countries, 30 years, multiple variables, and you need to calculate growth rates, filter specific time periods, and summarize by region.
+
+Today you'll learn to do this with elegant, readable code.
+
+## Packages
+
+For today's exercises, you'll need to install the `gapminder` package.
+
+```{r}
+#| label: packages
+
+
+package_names <- c("gapminder")
+
+# Check if the packages are installed
+if (!requireNamespace(package_names, quietly = TRUE)) {
+  # If not installed, install the packages
+  install.packages(package_names)
+}
+```
+
+# The `tidyverse` Philosophy & `dplyr` Overview (`I Do`)
+
+## What is the `tidyverse`?
+
+The **`tidyverse`** is a collection of R packages designed to work together seamlessly for data science. Think of it as a "standard library" for modern data analysis.
+
+Contains 9 core packages:
+
+-   `ggplot2` (visualization)
+-   `dplyr` (data manipulation)
+-   `tidyr` (data tidying)
+-   `readr` (data import)
+-   `purrr` (functional programming)
+-   `tibble` (modern data frames)
+-   `stringr` (string manipulation)
+-   `forcats` (factor handling)
+-   `lubridate` (working with date-times)
+
+```{r}
+#| label: load-tidyverse
+
+library(tidyverse)
+```
+
+::: callout-note
+The `::` function allows you to call a function from within a package without attaching the package to your work space (`dplyr::filter()` versus `filter()`).
+:::
+
+::: callout-important
+After attaching the `tidyverse` package to your work space, you get a couple of "conflicts".
+
+What do you think "`dplyr::filter()` masks `stats::filter()`" means? How would you use the `filter()` function within the `dplyr` package? Within the `stats` package?
+:::
+
+## Core Design Principles
+
+1.  **Consistent API**: Similar function signatures across packages
+2.  **Pipe-friendly**: Functions designed for `%>%` or `|>` operators
+3.  **Human-readable**: Function names that describe what they do
+4.  **Tidy data**: Each variable is a column, each observation is a row
+
+## Our Dataset: `gapminder`
+
+We'll use the `gapminder` dataset—perfect for learning `dplyr` because it's clean, real, and interesting. [Gapminder](https://www.gapminder.org/) is an independent educational non-proﬁt "ﬁghting global misconceptions."
+
+```{r}
+#| label: gapminder-structure
+
+library(gapminder)
+
+# Look at the structure
+glimpse(gapminder)
+```
+
+::: callout-note
+Both `dplyr::glimpse()` and `str()` are used to examine the structure of data objects, but they have different outputs and focus areas.
+
++-----------------------------------------------------+---------------------------------------------------------+
+| `dplyr::glimpse()`                                  | `str()`                                                 |
++=====================================================+=========================================================+
+| -   Quick data exploration at the start of analysis | -   You need detailed technical information             |
+| -   You want a clean, readable overview             | -   Working with complex nested objects (lists, models) |
+| -   Working with tidyverse workflows                | -   Debugging data type issues                          |
+| -   Presenting data structure to others             | -   You want to see exact factor levels or attributes   |
++-----------------------------------------------------+---------------------------------------------------------+
+:::
+
+```{r}
+#| label: gapminder-head
+
+
+# What are we working with?
+head(gapminder)
+```
+
+head will defaultly show first 6 rows we can also customize the rows number we wanna see:
+
+```{r}
+head(gapminder, 10)
+```
+
+This dataset contains:
+
+-   **1,704 observations** across 142 countries
+-   **6 variables**: country, continent, year, life expectancy, population, GDP per capita
+-   **Time span**: 1952-2007 (every 5 years)
+
+Perfect for asking economic questions like: "Which countries had the fastest economic growth?" or "How does life expectancy relate to GDP?"
+
+::: callout-note
+## Data Objects
+
+Data of different types make up different classes of objects. To some extent you can think of these as different shapes.
+
+-   *Vectors* are one-dimensional sets of values and contain only one data type (`+` maybe special values). Class is usually same as the data type.
+-   *Matrices* are rectangular arrays of values of one type (`+` maybe special values). Class is `"matrix"`.
+-   *Data frames* are rectangular arrays, but the columns can be different types. These are the standard way to handle data sets in R. Class is `"data.frame"`.
+-   *Lists* can contain nearly anything in any combination. Can be irregular “trees.” Obviously versatile, but correspondingly harder to work with. Class is `"list"`.
+
+Other data classes include *arrays*, *character*, *complex*, *double*, *factor*, *logical*, *raw*, and *time series*.
+:::
+
+::: callout-note
+## tibble vs data.frame
+
+`tibbles` are generally preferred for new work due to their safer, more predictable behavior, while `data.frames` remain important for compatibility with base R and legacy code.
+
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| Feature                   | `data.frame`                                | `tibble`                                               | Example                                                           |
++===========================+=============================================+========================================================+===================================================================+
+| **Printing**              | Prints all rows (can flood console)         | Smart printing: shows dimensions, types, first 10 rows | `mtcars` vs `as_tibble(mtcars)`                                   |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Subsetting with `[,]`** | Can return vector (dimension drops)         | Always returns tibble                                  | `df[, 1]` → vector vs `tb[, 1]` → tibble                          |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Column Names**          | Auto-"fixes" names, converts spaces to dots | Preserves any valid name (spaces, numbers, emojis)     | `data.frame(`my var`= 1)` → `my.var` vs tibble preserves `my var` |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Partial Matching `$`**  | Allows dangerous partial matching           | Requires exact column names                            | `df$va` might match `variable` vs `tb$va` → `NULL`                |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **String Handling**       | Historically converted to factors           | Keeps strings as characters                            | `data.frame(x = "text")` vs `tibble(x = "text")`                  |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Vector Recycling**      | Silent recycling (can hide errors)          | Strict recycling rules                                 | `data.frame(x = 1:4, y = 1:2)` works vs tibble throws error       |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Row Names**             | Supports row names                          | Discourages row names (use columns instead)            | `rownames(df) <- letters[1:3]` vs explicit name column            |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Type Stability**        | Inconsistent return types                   | Predictable return types                               | Subsetting behavior varies vs always consistent                   |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Error Messages**        | Generic base R errors                       | Informative tidyverse-style errors                     | Less helpful vs more descriptive error messages                   |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+| **Performance**           | Slightly faster (less overhead)             | Slightly slower (more checks)                          | Marginal difference for most use cases                            |
++---------------------------+---------------------------------------------+--------------------------------------------------------+-------------------------------------------------------------------+
+:::
+
+## The Five Essential `dplyr` Verbs
+
+Think of `dplyr` verbs as the fundamental operations you perform on data:
+
+1.  **`select()`** – Pick columns (variables)
+2.  **`filter()`** – Pick rows (observations)
+3.  **`arrange()`** – Sort rows
+4.  **`mutate()`** – Create new variables
+5.  **`summarise()`** – Calculate summary statistics
+
+## Live Demo: Building a Data Pipeline
+
+| **What were the 5 countries with highest GDP per capita growth between 1952 and 2007?**
+
+```{r}
+#| label: pipeline-demo
+
+# Step 1: Look at the data structure first
+gapminder %>% 
+  select(country, year, gdpPercap) %>%
+  head()
+
+# Step 2: Calculate GDP growth for each country
+gdp_growth <- gapminder %>%
+  # Only keep countries with data for both 1952 and 2007
+  filter(year %in% c(1952, 2007)) %>%
+  # Keep relevant columns
+  select(country, continent, year, gdpPercap) %>%
+  # Reshape to calculate growth
+  pivot_wider(names_from = year, 
+              values_from = gdpPercap,
+              names_prefix = "gdp_") %>%
+  # Calculate growth rate
+  mutate(
+    gdp_growth_rate = (gdp_2007 - gdp_1952) / gdp_1952 * 100,
+    gdp_growth_absolute = gdp_2007 - gdp_1952
+  ) %>%
+  # Sort by growth rate
+  arrange(desc(gdp_growth_rate)) %>%
+  # Get top 5
+  slice_head(n = 5) %>%
+  print(gdp_growth) %>%
+
+  # Get first 25%
+  slice_head(prop = .25)
+  print(gdp_growth)
+```
+
+**What just happened?** We chained together multiple operations to answer a research question. Each `%>%` passes the result to the next function. Equivalent without pipes → heavily nested and harder to read.
+
+### The Power of the Pipe Operator
+
+The pipe operator (`%>%` or `|>`) makes code readable from left to right:
+
+::: callout-important
+For most day-to-day tidyverse work, both pipes work identically. Use `|>` for simple cases and better performance, use `%>%` when you need its extra flexibility or are working with older R versions. Many experienced users are gradually shifting to `|>` for new code while keeping `%>%` for complex operations.
+:::
+
+```{r}
+#| label: pipe-comparison
+#| eval: false
+
+# Without pipes (hard to read)
+slice_head(arrange(mutate(filter(gapminder, year == 2007), 
+                         gdp_billions = gdpPercap * pop / 1e9),
+                  desc(gdp_billions)), n = 3)
+
+# With pipes (reads like English)
+gapminder %>%
+  filter(year == 2007) %>%
+  mutate(gdp_billions = gdpPercap * pop / 1e9) %>%
+  arrange(desc(gdp_billions)) %>%
+  slice_head(n = 3) 
+```
+
+**Keyboard shortcut:** `Ctrl+Shift+M` (Windows) or `Cmd+Shift+M` (Mac)
+
+## Grouped Operations with group_by()
+
+The real power comes with **grouped operations**—performing calculations within groups:
+
+```{r}
+#| label: grouped-operations
+
+# What's the average life expectancy by continent over time?
+life_exp_by_continent <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(
+    avg_life_exp = mean(lifeExp),
+    countries_count = n(),
+    .groups = "drop"  # Good practice to to ensure subsequent operations are applied to the entire dataset, not within specific groups
+  )
+
+print(life_exp_by_continent)
+
+# Let's see the most recent data
+life_exp_by_continent %>%
+  filter(year == 2007) %>%
+  arrange(desc(avg_life_exp))
+```
+
+**Key insight:** `group_by()` doesn't change your data visually, but it changes how subsequent operations work. Think of it as "setting the context" for calculations.
+
+# Debugging Interlude: Common dplyr Errors
+
+Before we practice together, let's see the most common mistakes and how to fix them:
+
+```{r}
+#| label: debugging-demo
+#| eval: false
+
+# Show the data first  
+names(gapminder)    # Our data columns
+head(unique(gapminder$country), 10)   # Sample values in 'country' column
+
+# Mistake 1: Wrong column name
+gapminder %>% 
+  filter(Country == 'United States') %>% 
+# Solution: Check column names with names(data)
+name (gapminder) #Then we can have the variable names
+
+# Mistake 2: Wrong value name  
+result <- gapminder %>% 
+  filter(country == "USA") %>%
+  nrow()
+# Solution: Check unique values with unique(data$column)
+#   The correct country name is 'United States
+
+# Mistake 3: Assignment vs comparison
+gapminder %>%
+  filter(year = 2007)  # Should be ==, not =
+
+# Your data debugging toolkit
+names(data)           # Check column names
+unique(data$column)   # Check unique values 
+str(data)             # Check data types
+glimpse(data)         # Quick overview
+head(data)            # First few rows
+```
+
+**Your debugging workflow:**
+
+1.  **READ** the error message carefully
+2.  **CHECK** column names with `names(data)`
+3.  **VERIFY** values with `unique(data$column)`
+4.  **BUILD** your pipe chain step by step
+5.  **TEST** each piece before adding the next
+
+# Guided Practice: Building Together (`We Do`)
+
+Let's work through a data manipulation challenge together. I'll start, and you'll help me complete it.
+
+## Research Question
+
+| **"How has the relationship between GDP per capita and life expectancy changed over time?"**
+
+Let me start building the analysis, and the class will help guide the next steps:
+
+```{r}
+#| label: we-do-setup
+
+# Start by exploring the relationship in one year
+gdp_life_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  select(country, continent, gdpPercap, lifeExp)
+
+head(gdp_life_2007)
+```
+
+**Class discussion questions:**
+
+1.  What if we want to compare this relationship across multiple years?
+2.  Should we look at all years or just a few key years?
+3.  How should we summarize this relationship?
+
+**Let's build this together:**
+
+```{r}
+#| label: we-do-together
+
+# Class input: What years should we compare?
+unique(gapminder$years)
+key_years <- c(1952, 1977, 2002)
+
+# Class input: How should we structure this data?
+gdp_life_comparison <- gapminder %>%
+  filter(year %in% key_years) %>%
+  select(country, continent, year, gdpPercap, lifeExp) %>%
+  # Class question: What grouping makes sense here?
+  group_by(country, year) %>%
+  # Class question: What summaries should we calculate?
+  summarise(
+    avg_gdp = mean(gdpPercap),
+    avg_life_exp = mean(lifeExp),
+    countries = n(),
+    .groups = "drop"
+  ) %>%
+  
+  
+  # Class question: How should we arrange this?
+  arrange(year)
+
+print(gdp_life_comparison)
+```
+
+::: {.callout-note collapse="true"}
+## Guided Practice Solution
+
+```{r}
+#| label: we-do-together-solution
+
+
+# Class input: What years should we compare?
+key_years <- c(1952, 1977, 2002, 2007)
+
+# Class input: How should we structure this data?
+gdp_life_comparison <- gapminder %>%
+  filter(year %in% key_years) %>%
+  select(country, continent, year, gdpPercap, lifeExp) %>%
+  # Class question: What grouping makes sense here?
+  group_by(continent, year) %>%
+  # Class question: What summaries should we calculate?
+  summarise(
+    avg_gdp = mean(gdpPercap),
+    avg_life_exp = mean(lifeExp),
+    countries = n(),
+    .groups = "drop"
+  ) %>%
+  # Class question: How should we arrange this?
+  arrange(continent, year)
+
+print(gdp_life_comparison)
+```
+:::
+
+**Discussion:** What patterns do you notice? How might we visualize this on Thursday?
+
+# Hands-On Practice: Your Turn (`You Do`)
+
+## Core Task: Essential dplyr Practice (25 minutes)
+
+Alright, time to get your hands dirty.
+
+Use the `gapminder` dataset to answer these questions. Work in pairs if you want—sometimes two brains are better than one, especially when debugging.
+
+### Question 1: Country Analysis
+
+Find the **3 countries** with the **highest life expectancy** in **Africa** in **2007**.
+
+::: callout-tip
+This is a classic *FILTER* ⟶ *ARRANGE* ⟶ *SLICE* problem. What's happening if you get zero rows?
+:::
+
+```{r}
+#| label: core-q1
+#| eval: false
+
+# Your code here
+highest_life_exp_africa <- gapminder %>%
+  # Fill in your pipeline
+
+print(highest_life_exp_africa)
+```
+
+### Question 2: Time Series Analysis
+
+Calculate the **change in GDP per capita** between **1952 and 2007** for **each country**. Show the **top 5 countries** with the **largest absolute increase**.
+
+::: callout-tip
+You'll need to reshape the data or get creative with filtering.
+:::
+
+```{r}
+#| label: core-q2
+#| eval: false
+
+# Your code here
+gdp_changes <- gapminder %>%
+  # Fill in your pipeline
+
+print(gdp_changes)
+```
+
+### Question 3: Continental Summaries
+
+For the year **2007**, calculate the **total population** and **average GDP per capita** for each **continent**. Sort by total population (descending).
+
+::: callout-tip
+-   Total population ⟶ `sum()`
+-   Average GDP per capita ⟶ `mean()`
+:::
+
+```{r}
+#| label: core-q3
+#| eval: false
+
+# Your code here
+continental_summary <- gapminder %>%
+  # Fill in your pipeline
+
+print(continental_summary)
+```
+
+### Question 4: Population Giants
+
+Find all countries that had a **population greater than 100 million** in **any year**. Show the country, year, and population, sorted by population (descending).
+
+::: callout-tip
+This one's straightforward if you think about what "any year" means for your filter.
+:::
+
+```{r}
+#| label: core-q4
+#| eval: false
+
+# Your code here
+population_giants <- gapminder %>%
+  # Fill in your pipeline
+
+print(population_giants)
+```
+
+## Extension Activities
+
+If you finished the core tasks, try these extension activities:
+
+### Extension 1: Growth Rate Analysis
+
+Calculate the **average annual growth rate** of GDP per capita for each country between 1952 and 2007. Show the top 10 fastest-growing countries.
+
+::: callout-tip
+Hint: Annual growth rate formula: `((final_value/initial_value)^(1/years) - 1) * 100`
+
+Double hint: You have 55 years of data (2007-1952)
+:::
+
+```{r}
+#| label: ext-1
+#| eval: false
+
+# Your code here - this requires some creative thinking
+growth_rates <- gapminder %>%
+  # Your pipeline here
+
+print(growth_rates)
+```
+
+### Extension 2: Correlation Analysis
+
+For each continent, calculate the **correlation coefficient** between GDP per capita and life expectancy using all available years. Which continent has the strongest relationship?
+
+::: callout-tip
+Hint: Use `cor()` inside `summarise()`
+:::
+
+```{r}
+#| label: ext-2
+#| eval: false
+
+# Your code here - you'll need cor() function inside summarise()
+correlations <- gapminder %>%
+  # Your pipeline here
+
+print(correlations)
+```
+
+### Extension 3: Complex Filtering
+
+Find countries that experienced **negative GDP growth** in at least one 5-year period. Show the country, the period, and the growth rate.
+
+::: callout-tip
+This one's tricky - you'll need to think about how to calculate period-to-period changes.
+:::
+
+```{r}
+#| label: ext-3
+#| eval: false
+
+# Your code here - this is genuinely challenging!
+negative_growth <- gapminder %>%
+  # Your pipeline here
+
+print(negative_growth)
+```
+
+## Working Solutions
+
+Here are the solutions - but seriously, don't peek until you've wrestled with the problems. The struggle is where the learning happens.
+
+::: {.callout-note collapse="true"}
+## Core Task Solutions
+
+### Question 1 Solution:
+
+```{r}
+#| label: solution-q1
+
+highest_life_exp_africa <- gapminder %>%
+  filter(continent == "Africa", year == 2007) %>%
+  arrange(desc(lifeExp)) %>%
+  slice_head(n = 3) %>%
+  select(country, lifeExp)
+
+print(highest_life_exp_africa)
+```
+
+### Question 2 Solution:
+
+```{r}
+#| label: solution-q2
+
+gdp_changes <- gapminder %>%
+  filter(year %in% c(1952, 2007)) %>%
+  select(country, year, gdpPercap) %>%
+  pivot_wider(names_from = year, values_from = gdpPercap, names_prefix = "gdp_") %>%
+  mutate(gdp_change = gdp_2007 - gdp_1952) %>%
+  arrange(desc(gdp_change)) %>%
+  slice_head(n = 5) %>%
+  select(country, gdp_1952, gdp_2007, gdp_change)
+
+print(gdp_changes)
+```
+
+### Question 3 Solution:
+
+```{r}
+#| label: solution-q3
+
+continental_summary <- gapminder %>%
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  summarise(
+    total_population = sum(pop),
+    avg_gdp_per_cap = mean(gdpPercap),
+    countries = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(total_population))
+
+print(continental_summary)
+```
+
+### Question 4 Solution:
+
+```{r}
+#| label: solution-q4
+
+population_giants <- gapminder %>%
+  filter(pop > 100000000) %>%
+  select(country, year, pop) %>%
+  arrange(desc(pop))
+
+print(population_giants)
+```
+:::
+
+::: {.callout-note collapse="true"}
+## Extension Activity Solutions
+
+### Extension 1 Solution:
+
+```{r}
+#| label: solution-ext1
+
+growth_rates <- gapminder %>%
+  filter(year %in% c(1952, 2007)) %>%
+  select(country, year, gdpPercap) %>%
+  pivot_wider(names_from = year, values_from = gdpPercap, names_prefix = "gdp_") %>%
+  mutate(
+    annual_growth_rate = ((gdp_2007/gdp_1952)^(1/55) - 1) * 100
+  ) %>%
+  arrange(desc(annual_growth_rate)) %>%
+  slice_head(n = 10) %>%
+  select(country, gdp_1952, gdp_2007, annual_growth_rate)
+
+print(growth_rates)
+```
+
+### Extension 2 Solution:
+
+```{r}
+#| label: solution-ext2
+
+correlations <- gapminder %>%
+  group_by(continent) %>%
+  summarise(
+    correlation = cor(gdpPercap, lifeExp),
+    countries = n_distinct(country),
+    observations = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(correlation))
+
+print(correlations)
+```
+:::
+
+# Wrap-Up & Looking Ahead
+
+## What We Learned Today
+
+**The core `dplyr` toolkit:**
+
+-   `select()` – grab the columns you want
+-   `filter()` – grab the rows you want
+-   `arrange()` – sort your data
+-   `mutate()` – create new variables
+-   `summarise()` – crunch numbers
+-   `group_by()` – do calculations within groups
+
+**The big ideas:**
+
+-   **Pipe operator** (`%>%`) makes code readable (and your life easier)
+-   **Grouped operations** let you analyze subsets without splitting datasets
+-   **Debugging is normal** - we all make the same mistakes
+
+## Why This Actually Matters
+
+**Real scenarios where you'll use these exact skills:**
+
+1.  **Policy Analysis:** "How did the minimum wage increase affect employment by industry and state?"
+
+    -   `group_by` industry, state
+    -   `mutate` employment_change
+    -   `filter` recent years
+
+2.  **Development Economics:** "Which aid interventions had the largest poverty impact?"
+
+    -   `filter` aid_type
+    -   `mutate` poverty_reduction
+    -   `arrange` by effectiveness
+
+3.  **Trade Research:** "How did NAFTA affect bilateral trade flows?"
+
+    -   `group_by` country_pair
+    -   `mutate` trade_growth
+    -   `filter` pre_post_nafta
+
+::: callout-important
+This isn't academic busywork—it's the foundation of every quantitative research project!
+:::
+
+## Next Lecture Preview: Making Pretty Pictures
+
+Thursday we'll learn `ggplot2` to turn these data transformations into compelling visualizations. Think of it this way—`dplyr` shapes your data, `ggplot2` makes it tell a story.
+
+### Reading for Thursday
+
+For Thursday's visualization class:
+
+-   **R4DS Chapter 1 (Data Visualization)** – comprehensive `ggplot2` intro
+
+**Helpful extras:**
+
+-   [ggplot2 tutorial](https://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html) – if you want extra practice
+-   [ggplot2 cheatsheet](https://rstudio.github.io/cheatsheets/html/data-visualization.html) – keep this handy
+
+------------------------------------------------------------------------
+
+**Remember:** Use Canvas discussion board for questions that benefit everyone, and don't hesitate to come to office hours Thursday 10:30-11:30 AM!

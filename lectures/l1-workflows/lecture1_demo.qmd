@@ -19,6 +19,8 @@ execute:
 editor: visual
 ---
 
+warning: false → hides yellow warning messages, message: false → hides loading/notification messages, like library packages eval: false → shows the code but does not run it, echo: false → shows only the result, not the code
+
 This Quarto file will guide you through a series of "I Do, We Do, You Do" tasks that blends demonstration with hands-on practice opportunities as a class and in small-groups.
 
 ## RStudio IDE Tour (`I Do`)
@@ -35,7 +37,7 @@ Let's look at the four main panes:
 ### Create R project
 
 1.  Click `File -> New Project...`
-2.  Choose `New Directory`.
+2.  Choose `New Directory`. create a r project inside the project， often choose this one if have no existing folder.
 3.  Choose `New Project`.
 4.  Give it a name like `APEC8221_R-Programming`. Store it somewhere sensible (like your Desktop or a `Courses` folder).
 5.  Click `Create Project`.
@@ -83,6 +85,10 @@ RnwWeave: Sweave
 LaTeX: pdfLaTeX
 ```
 
+### ![](images/clipboard-2684265917.png){width="517"}
+
+![](images/clipboard-2223879230.png){width="475"}
+
 ### Discussion Questions
 
 **Q: What do you think 'RestoreWorkspace' means?**
@@ -103,8 +109,11 @@ LaTeX: pdfLaTeX
 -   Prevents encoding issues when sharing code
 -   Universal standard
 
-These settings ensure your project works the **same way on my computer, your computer, and your collaborator's computer**!
-Reproducibility in action!
+These settings ensure your project works the **same way on my computer, your computer, and your collaborator's computer**! Reproducibility in action!
+
+![](images/clipboard-2562798910.png){width="410"}
+
+### ![](images/clipboard-2989865024.png){width="410"}
 
 ### Relative paths
 
@@ -114,7 +123,7 @@ A relative path specifies the location of a file or directory [**in relation to
 
     -   `'C:/Users/joglekar/Documents/APEC8221/Lectures/lecture1_notes.qmd/'`
 
--   Relative path uses special notations like `.` (current directory) and `..` (parent directory) to define the path from where you are currently positioned
+-   Relative path uses special notations like `.` (current directory) and `..` (parent 上一级目录directory) to define the path from where you are currently positioned
 
     -   `'./Lectures/lecture1_notes.qmd/'`
 
@@ -130,21 +139,28 @@ dir.create("output")
 list.files(all.files = TRUE)
 ```
 
-This structure means anyone can run your code.
-No more `setwd('C:/Users/joglekar/Documents/my_messy_folder/')`
+![](images/clipboard-2899824417.png){width="471"}
 
-## Basic R Syntax
+images是如果我在visual上复制粘贴图片，就会自动生成这个文件。
 
--   **Assignment operator `<-`**: "gets". Puts the thing on the right into the object on the left.
+This structure means anyone can run your code. No more `setwd('C:/Users/joglekar/Documents/my_messy_folder/')`
+
+![](images/clipboard-3901337666.png){width="450"}
+
+## ![](images/clipboard-622116261.png){width="398"}
+
+## Basic R Syntax语法
+
+-   **Assignment operator `<-`**: "gets". Puts the thing on the right into the object on the left.**赋值符号，把右边的放到左边**
     -   `x <- 5`
 -   **Basic data types**:
-    -   Character: `my_name <- "Ali Joglekar"`
-    -   Logical: `is_instructor <- TRUE`
-    -   Numeric vector: `test_scores <- c(85, 92, 78, 96)`
--   **Objects**: You store data in objects (also called variables).
+    -   Character字符型，储存文本要用双引号: `my_name <- "Ali Joglekar"`
+    -   Logical逻辑性，只有对或错: `is_instructor <- TRUE`
+    -   Numeric vector数值向量，里面只能同时包含一种type: `test_scores <- c(85, 92, 78, 96)`
+-   **Objects对象或变量**: You store data in objects (also called variables).
     -   `my_weight <- 180`
 -   **Functions**: `function_name(argument1, argument2)`.
-    -   `sum(2, 3)`
+    -   `sum(2, 3)，结果是5`
     -   `mean(test_scores)`
 -   **Comments `#`**: R ignores anything after a `#`. Use them to explain your code!
 -   **Packages:** library() loads/attaches package(s) to your workspace
@@ -156,9 +172,11 @@ No more `setwd('C:/Users/joglekar/Documents/my_messy_folder/')`
 2.  A blank script opens in the Source pane.
 3.  Save the file in your `Lectures\Lecture1_Workflow` folder as `lec-01-practice.R`.
 
+![](images/clipboard-1219519132.png){width="553"}
+
 ### Core Exercise (10 mins):
 
-Type the following code into your script and run each line using `Cmd/Ctrl + Enter`.
+Type the following code into your script and run each line using `Cmd/Ctrl + Enter`.mac是cmd+return.
 
 **Don't copy-paste**; the muscle memory is important.
 
@@ -176,11 +194,12 @@ c <- a + b
 c 
 ```
 
-To run a line of code, put your cursor on that line and press Ctrl+Enter on Windows or Cmd+Enter on a Mac.
-Do this for each line.
+To run a line of code, put your cursor光标 on that line and press Ctrl+Enter on Windows or Cmd+return on a Mac. Do this for each line.
 
 -   What do you see in the Environment pane?
 -   What happens in the console?
+
+![](images/clipboard-2463675654.png)
 
 ### `You Do` Extensions
 
@@ -188,8 +207,27 @@ If you finish early, try these extended learning activities:
 
 #### Extension 1: Challenges in your script
 
--   **Challenge 1:** Create two new objects, `x` and `y`, with different numbers. Calculate their product (`*`) and store it in an object called `z`.
+-   **Challenge 1:** Create two new objects, `x` and `y`, with different numbers. Calculate their product积 (`*`) and store it in an object called `z`.
+
+```{r}
+# 定义变量 x 和 y
+x <- 4
+y <- 7
+# 计算 x 和 y 的积
+z <- x * y
+# 打印结果
+z   # 结果是 28
+```
+
 -   **Challenge 2:** Create an object called `my_name` that contains your name as a character string (e.g., `"Ali"`). What happens if you try to add `my_name` to a number? R will give you an error—this is a good thing! Reading errors is a key skill.
+
+```{r}
+my_name <- "Yunshu"
+my_name
+my_name <- Yunshu
+my_name + 3
+```
+
 -   **Challenge 3:** Add more comments to your script explaining what each line does.
 
 #### Extension 2: Customize RStudio
@@ -199,6 +237,8 @@ If you finish early, try these extended learning activities:
     -   Check "Show line numbers"
     -   Check "Highlight R function calls"
 -   **Tools → Global Options → Pane Layout:** Arrange panes to your preference
+
+#### ![](images/clipboard-2000340929.png){width="586"}
 
 #### Extension 3: Explore Package Installation
 
@@ -218,8 +258,7 @@ library(here)  # Test the here() function here()
 
 ## Debugging Interlude: Common R Errors (`I Do`)
 
-Don't be afraid to create errors; it's the fastest way to learn.
-Here are the three most common beginner errors:
+Don't be afraid to create errors; it's the fastest way to learn. Here are the three most common beginner errors:
 
 ### Mistake 1: Case sensitivity (very common!)
 
@@ -234,8 +273,9 @@ my_number <- 42
 My_number
 ```
 
-**Solution:** R is case-sensitive!
-Check your spelling.
+**Solution:** R is case-sensitive! Check your spelling.
+
+![](images/clipboard-1983342370.png){width="393"}
 
 ### Mistake 2: Missing quotes for character data
 
@@ -253,7 +293,7 @@ university <- University of Minnesota
 
 **Solution:** Text needs quotes around it.
 
-### Mistake 3: Unmatched parentheses
+### Mistake 3: Unmatched parentheses括号不匹配
 
 ```{r}
 #| error: true
@@ -267,12 +307,11 @@ print(result)
 mean(c(1, 2, 3, 4, 5)
 ```
 
-**Solution:** Count your parentheses.
-RStudio helps with matching.
+**Solution:** Count your parentheses. RStudio helps with matching.
 
 ### Your debugging workflow
 
 1.  READ the error message carefully
-2.  CHECK spelling and capitalization
-3.  COUNT parentheses, brackets, and quotes
+2.  CHECK spelling and capitalization检查拼写和大小写
+3.  COUNT parentheses, brackets, and quotes括号，方括号和引号
 4.  ASK for help if you're stuck!

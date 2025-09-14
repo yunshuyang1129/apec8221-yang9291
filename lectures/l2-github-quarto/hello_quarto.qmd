@@ -1,0 +1,55 @@
+---
+title: "APEC 8221 - My Research Workflow"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+---
+title: "APEC 8221 - My Research Workflow"
+author: "[yunshu]"
+date: today
+format: pdf
+---
+
+# Introduction
+
+This is my first reproducible document for APEC 8221 using \[Personal/Enterprise\] GitHub.
+
+## Basic R Skills
+
+```{r}
+# Demonstrate basic R commands
+library(tidyverse)
+
+# Create some data
+my_data <- data.frame(
+  x = 1:10,
+  y = (1:10)^2 + rnorm(10, 0, 5)
+)
+
+# Summary statistics
+summary(my_data)
+
+# Store values for inline use
+mean_x <- mean(my_data$x)
+```
+
+The average of variable `x` is `{r} round(mean_x, 1)`.
+
+## My First Plot
+
+```{r}
+ggplot(my_data, aes(x = x, y = y)) +
+  geom_point(size = 3, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "My First Reproducible Plot",
+    x = "X Variable",
+    y = "Y Variable"
+  ) +
+  theme_minimal()
+```

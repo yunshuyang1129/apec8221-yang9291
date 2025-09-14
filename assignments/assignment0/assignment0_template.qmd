@@ -36,7 +36,7 @@ readLines("assignment0-setup.txt") |>
 
 <!-- Make sure the file path correctly links to your repo URL. -->
 
-My GitHub repo URL is <https://github.com/%5Byour-username%5D/apec8221-%5Byour-x500id%5D>
+My GitHub repo URL is <https://github.com/yunshuyang1129/apec8221-yang9291.git>
 
 ------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ This section embeds the content from the `assignment-0-quarto.qmd` file you crea
 
 <!-- Make sure the file path is correct relative to this document. -->
 
-{{< include assignment0-quarto.qmd >}}
+{{< include assignment-0-quarto.qmd >}}
 
 ------------------------------------------------------------------------
 
@@ -64,7 +64,8 @@ This section embeds the content from the `assignment-0-quarto.qmd` file you crea
 #| label: q1-assignment
 
 # Create the 'my_age' object below
-
+my_age <- 24   
+my_age
 ```
 
 ### 2. Vectors
@@ -77,7 +78,8 @@ This section embeds the content from the `assignment-0-quarto.qmd` file you crea
 #| label: q2-vectors
 
 # Create the 'favorite_numbers' vector below
-
+favorite_numbers <- c(7, 13, 21)
+favorite_numbers
 ```
 
 ### 3. Subsetting Vectors
@@ -88,7 +90,7 @@ This section embeds the content from the `assignment-0-quarto.qmd` file you crea
 #| label: q3-subsetting
 
 # Write your subsetting code below
-
+favorite_numbers[2]
 ```
 
 ### 4. Missing Values and Logic
@@ -104,13 +106,13 @@ x <- c(1, 5, NA, 10, NA, 20)
 ```{r}
 #| label: q4a-find-na
 # a) Return a logical vector indicating missing elements
-
+is.na(x)
 ```
 
 ```{r}
 #| label: q4b-count-na
 # b) Count the total number of missing values
-
+sum(is.na(x))
 ```
 
 ### 5. Data Frames and Inspection
@@ -130,32 +132,32 @@ pets <- data.frame(
 ```{r}
 #| label: q5a-head
 # a) Look at the first few rows
-
+head(pets)
 ```
 
 ```{r}
 #| label: q5b-structure
 # b) Get a summary of the structure
-
+head(pets)
 ```
 
 ```{r}
 #| label: q5c-select-column
 # c) Select only the 'age' column
-
+pets$age
 ```
 
 ### 6. Workspace and Files
 
 **Question:** a. What function would you use to see a list of all the objects currently in your R environment? b. What function would you use to find out your current working directory?
 
-**Answer:** a. \[Your text answer here...\] b. \[Your text answer here...\]
+**Answer:** a. \[ls()\] b. \[getwd()\]
 
 ### 7. Getting Help
 
 **Question:** Which function in R can you use to open the help documentation for another function? In the code chunk below, write the code you would use to see the help file for the `mean()` function.
 
-**Answer:** \[Your text answer here...\]
+**Answer:** \[?function_name or help("function_name")\]
 
 ```{r}
 #| label: q7-help 
@@ -163,5 +165,6 @@ pets <- data.frame(
 
 # Write the code to see the help file for the mean() function below.
 # I've set eval: false so this chunk won't cause an error when you render.
-
+?mean
+help("mean")
 ```
