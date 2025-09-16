@@ -1,0 +1,354 @@
+---
+title: "APEC 8221 - Assignment 1: Tidyverse Fundamentals"
+author: "[Yunshu Yang]"
+date: today
+format: 
+  pdf:
+    number-sections: true
+    colorlinks: true
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  eval: true
+  echo: true
+editor: visual
+---
+
+```{=html}
+<!-- 
+Before you begin:
+1. Save this file as assignment1-[your-x500-id].qmd
+2. Replace "[REPLACE WITH YOUR NAME]" above with your actual name
+3. Make sure you're working in your course R Project
+4. Include your GitHub repository URL in Canvas submission
+-->
+```
+
+**GitHub Repository URL:** [\[Insert your repository URL here\]](https://github.com/yunshuyang1129/apec8221-yang9291.git)
+
+# Setup
+
+```{r}
+#| label: setup
+
+# Load required packages
+library(tidyverse)
+library(gapminder)
+
+# Check data structure
+glimpse(gapminder)
+```
+
+# Data Analysis & Visualization Practice
+
+## Top Performers Identification
+
+Find the top 4.3 countries in 2.each continent for 3.highest life expectancy and highest GDP per capita in 1.2007.
+
+### Highest Life Expectancy by Continent (2007)
+
+```{r}
+#| label: top-life-exp
+
+# Your code here - find top 3 countries by life expectancy in each continent
+# Remember to use group_by(), arrange(), and slice_head()
+gapminder %>%
+  filter(year == 2007) %>%              # Step 1: keep 2007 data only
+  group_by(continent) %>%               # Step 2: group data by continent
+  arrange(desc(lifeExp)) %>%            # Step 3: sort by life expectancy (high to low)
+  slice_head(n = 3) %>%                 # Step 4: select the top 3 per group
+  select(continent, country, lifeExp)   # Step 5: keep only needed columns
+```
+
+### Highest GDP per Capita by Continent (2007)
+
+```{r}
+#| label: top-gdp
+
+# Your code here - find top 3 countries by GDP per capita in each continent
+gapminder %>%
+  filter(year == 2007) %>%                 # Step 1: keep 2007 data
+  group_by(continent) %>%                  # Step 2: group by continent
+  arrange(desc(gdpPercap)) %>%             # Step 3: sort by GDP per capita (high to low)
+  slice_head(n = 3) %>%                    # Step 4: keep top 3 per group
+  select(continent, country, gdpPercap)    # Step 5: display relevant columns
+```
+
+**Brief analysis:** *\[Write 2-3 sentences about what patterns you notice in the top performers\]*: In 2007, countries with the highest life expectancy were mostly high-income economies such as Japan, Iceland, and Australia. Interestingly, the countries with the highest GDP per capita (e.g., Norway, Kuwait, and Singapore) were not always the ones with the highest life expectancy. This suggests that while wealth is strongly associated with better health outcomes, other social, healthcare, and policy factors also play important roles in determining life expectancy.
+
+## Development Progress Visualization
+
+Create a scatter plot comparing each country's 1952 vs. 2007 life expectancy.
+
+```{r}
+#| label: life-exp-data-prep
+
+# Step 1: Create separate data frames for 1952 and 2007
+  # Your code here - filter for 1952 and select relevant columns
+lifeExp_1952 <- gapminder %>%
+  filter(year == 1952) %>%
+  select(country, lifeExp_1952 = lifeExp)
+
+  # Your code here - filter for 2007 and select relevant columns (include population!)
+lifeExp_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  select(country, continent, pop, lifeExp_2007 = lifeExp) #continents are the same as 1952 and 2007, so can only keep 2007's continent
+
+
+# Step 2: Combine using provided left_join code
+lifeExp_data <- left_join(lifeExp_1952, lifeExp_2007, by = "country")
+  
+# Step 3: Handle missing data
+lifeExp_data <- lifeExp_data %>%
+  # Your code here - remove countries with missing data using filter()
+ filter(!is.na(lifeExp_1952), !is.na(lifeExp_2007))
+
+#check
+head(lifeExp_data)
+```
+
+```{r}
+#| label: life-exp-plot
+#| fig-width: 10
+#| fig-height: 8
+
+# Create the scatter plot
+ggplot(lifeExp_data, aes(x = lifeExp_1952, y = lifeExp_2007)) +
+  # Your code here - add the diagonal reference line using geom_abline()
+  # Add points with color by continent and size by population
+  # Add professional labels and theme
+geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray") +
+  geom_point(aes(color = continent, size = pop), alpha = 0.7) +
+  labs(
+    title = "Life Expectancy: 1952 vs 2007",
+    x = "Life Expectancy in 1952",
+    y = "Life Expectancy in 2007",
+    color = "Continent",
+    size = "Population"
+  ) +
+  theme_minimal()
+```
+
+**Analysis:** *\[Write 2-3 sentences explaining what the plot shows about global health progress\]* : The scatter plot shows that nearly all countries lie above the diagonal line, meaning life expectancy in 2007 was consistently higher than in 1952. The size of the points highlights how improvements in large-population countries such as China and India had a major influence on global health progress. At the same time, differences remain across regions: while Europe and Oceania reached the highest life expectancies, many African countries still lagged behind, showing persistent global health disparities.
+
+## Development Progress Classification
+
+Using the `lifeExp_data` from Task 2.1.2, classify countries by improvement level.
+
+```{r}
+#| label: life-exp-classification
+
+# Add classification to your existing lifeExp_data
+lifeExp_data <- lifeExp_data %>%
+  mutate(
+    improvement = lifeExp_2007 - lifeExp_1952,   # years gained
+    improvement_level = case_when(
+      improvement >= 30 ~ "Major Improvement",
+      improvement >= 15 ~ "Moderate Improvement",
+      improvement >= 0  ~ "Minor Improvement",
+      improvement < 0   ~ "Decline"
+    )
+  )
+
+# Create summary table
+  # Your code here - group by continent and improvement_level, count countries
+improvement_summary <- lifeExp_data %>%
+  group_by(continent, improvement_level) %>%
+  summarise(n_countries = n(), .groups = "drop")
+
+
+print(improvement_summary)
+```
+
+### Analysis Questions
+
+**1. Which continent has the most countries with "Major Improvement"?**
+
+```{r}
+#| label: major-improvement-analysis
+
+# Your code here - analyze major improvement by continent
+# Count countries with Major Improvement by continent
+major_improvement <- lifeExp_data %>%
+  filter(improvement_level == "Major Improvement") %>%
+  group_by(continent) %>%
+  summarise(n_countries = n(), .groups = "drop") %>%
+  arrange(desc(n_countries))
+
+print(major_improvement)
+```
+
+\[Your answer here\]: Asia has the most countries with “Major Improvement,” with 7 countries showing a gain of 30 or more years in life expectancy between 1952 and 2007. In contrast, only one country in Africa and one in the Americas fall into this category, highlighting Asia’s substantial health progress during this period.
+
+**2. Are there any countries that experienced decline? Which ones and why might this have happened?**
+
+```{r}
+#| label: decline-analysis
+
+# Your code here - find and examine countries with decline
+# Find countries with decline
+decline_countries <- lifeExp_data %>%
+  filter(improvement_level == "Decline") %>%
+  select(country, continent, lifeExp_1952, lifeExp_2007, improvement)
+
+print(decline_countries)
+```
+
+*\[Your answer here\]:* Yes, two countries experienced a decline in life expectancy between 1952 and 2007: Swaziland (Eswatini) and Zimbabwe, both located in Africa. These declines are largely attributed to the HIV/AIDS epidemic, which severely reduced life expectancy in southern Africa during the 1990s and 2000s. In addition, Zimbabwe also faced political and economic crises that weakened its healthcare system and contributed to worsening health outcomes.
+
+**3. What does this tell us about global health convergence?**
+
+*\[Your answer here - 2-3 sentences about convergence patterns\]:* The results suggest partial convergence in global health: while nearly all countries improved their life expectancy between 1952 and 2007, the magnitude of improvement varied widely across regions. Many Asian countries achieved major gains, while some African countries experienced stagnation or even decline, showing that global health progress is uneven and convergence is incomplete.
+
+## Economic Development Trajectories
+
+Create a line plot showing life expectancy changes over time for selected countries.
+
+### Step 1: Guided Discovery
+
+```{r}
+#| label: trajectory-discovery
+
+# Find interesting countries for your plot
+  # Your code here - calculate change and identify top/bottom performers
+life_exp_changes <- lifeExp_data %>%
+  mutate(change = lifeExp_2007 - lifeExp_1952) %>%
+  arrange(desc(change))
+
+# Print top gainers and any decliners
+top_gainers <- life_exp_changes %>% 
+  slice_max(change, n = 5) %>%
+  select(country, continent, lifeExp_1952, lifeExp_2007, change)
+print(top_gainers)
+
+decliners <- life_exp_changes %>%
+  filter(change < 0) %>%
+  select(country, continent, lifeExp_1952, lifeExp_2007, change)
+print(decliners)
+
+```
+
+### Step 2: Create Trajectory Visualization
+
+```{r}
+#| label: trajectory-plot
+#| fig-width: 10
+#| fig-height: 6
+
+# Select 5-6 interesting countries based on your discovery
+selected_countries <- c("Oman", "Vietnam", "Indonesia", 
+                        "Saudi Arabia", "Swaziland", "Zimbabwe")
+  # Your countries here - include top gainer, any decliner, and 3-4 others of interest
+
+
+  # Your code here - filter for selected countries
+trajectory_data <- gapminder %>%
+  filter(country %in% selected_countries)
+
+
+# Create line plot
+ggplot(trajectory_data, aes(x = year, y = lifeExp, color = country)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Life Expectancy Trajectories (1952–2007)",
+    x = "Year",
+    y = "Life Expectancy",
+    color = "Country"
+  ) +
+  theme_minimal()
+  # Your code here - add lines, points, and professional labeling
+
+
+```
+
+**Caption:** *\[Write 2-3 sentences explaining why you selected these countries and what pattern stands out\]*: These trajectories highlight striking contrasts in global health development. Oman, Vietnam, Saudi Arabia, and Indonesia show dramatic improvements in life expectancy, reflecting rapid social and economic progress. In contrast, Swaziland and Zimbabwe experienced declines after the 1990s due to the HIV/AIDS epidemic, illustrating how health crises can reverse decades of progress.
+
+# Research Discovery & Critical Analysis
+
+## Choose Your Research Question
+
+**Selected Research Question:** *\[A, B, C, D, or E\]：* **Which countries achieved double improvement (GDP and life expectancy both increased) between 1952 and 2007, and which ones did not? What patterns can we observe across these groups?**
+
+## Research Analysis
+
+### Data Analysis
+
+```{r}
+#| label: research-analysis
+
+# Your code here - use appropriate dplyr operations to investigate your question
+# This should include filtering, grouping, summarizing, and/or calculating as needed
+
+# Step 1: Extract 1952 and 2007 data
+gap_1952 <- gapminder %>%
+  filter(year == 1952) %>%
+  select(country, gdpPercap_1952 = gdpPercap, lifeExp_1952 = lifeExp)
+
+gap_2007 <- gapminder %>%
+  filter(year == 2007) %>%
+  select(country, continent, gdpPercap_2007 = gdpPercap, lifeExp_2007 = lifeExp)
+
+# Step 2: Join and calculate changes
+gap_change <- left_join(gap_1952, gap_2007, by = "country") %>%
+  select(country, continent, gdpPercap_1952, gdpPercap_2007,
+         lifeExp_1952, lifeExp_2007) %>%
+  mutate(
+    gdp_change = gdpPercap_2007 - gdpPercap_1952,
+    lifeExp_change = lifeExp_2007 - lifeExp_1952,
+    double_improve = ifelse(gdp_change > 0 & lifeExp_change > 0, "Yes", "No")
+  )
+
+#list double improvement
+double_yes <- gap_change %>%
+  filter(double_improve == "Yes") %>%
+  select(country, continent, gdpPercap_1952, gdpPercap_2007, gdp_change,
+         lifeExp_1952, lifeExp_2007, lifeExp_change)
+
+print(double_yes)
+
+#list double non-improvement
+double_no <- gap_change %>%
+  filter(double_improve == "No") %>%
+  select(country, continent, gdpPercap_1952, gdpPercap_2007, gdp_change,
+         lifeExp_1952, lifeExp_2007, lifeExp_change)
+
+print(double_no)
+
+#summary
+gap_change %>%
+  group_by(double_improve, continent) %>%
+  summarise(n_countries = n(),
+            avg_gdp_change = mean(gdp_change, na.rm = TRUE),
+            avg_lifeExp_change = mean(lifeExp_change, na.rm = TRUE),
+            .groups = "drop")
+```
+
+### Visualization
+
+```{r}
+#| label: research-plot
+#| fig-width: 8
+#| fig-height: 6
+
+# Your code here - create one clear plot that supports your findings
+ggplot(gap_change, aes(x = gdp_change, y = lifeExp_change, color = continent)) +
+  geom_point(size = 3, alpha = 0.7) +
+  facet_wrap(~ double_improve) +   #seperate
+ labs(
+  title = "Double vs. No Double Improvement in GDP and Life Expectancy (1952–2007)",
+  x = "Change in GDP per capita",
+  y = "Change in Life Expectancy (years)"
+) +
+  theme_minimal()
+
+```
+
+### Interpretation (150-200 words)
+
+*\[Your interpretation here - explain what you found, why it's interesting, potential explanations for the pattern, and any limitations of your analysis\]:* This analysis explored whether countries experienced “double improvement,” defined as simultaneous gains in both GDP per capita and life expectancy between 1952 and 2007. The majority of countries fell into the “double improvement” category, highlighting a broad pattern of economic growth accompanied by health progress during this period. However, a small subset of countries did not show this dual progress. For example, several African countries saw improvements in life expectancy but little or negative GDP growth, while a few Asian and African countries showed economic stagnation or decline.
+
+These findings are interesting because they reveal that economic development and population health often move together, but not universally. Contextual factors such as political stability, governance, public health interventions, and the HIV/AIDS epidemic in sub-Saharan Africa may help explain why some countries failed to experience improvements in both dimensions.
+
+One limitation of this analysis is that it relies only on two time points (1952 and 2007) and cannot capture short-term fluctuations or regional crises. Additionally, GDP per capita and life expectancy, while widely used, are imperfect measures of overall well-being and may obscure within-country inequality.
